@@ -15,9 +15,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/sdoque/mbaigo/components"
-	"github.com/sdoque/mbaigo/forms"
-	"github.com/sdoque/mbaigo/usecases"
+	"github.com/sdoque/mbaigo/pkg/components"
+	"github.com/sdoque/mbaigo/pkg/forms"
+	"github.com/sdoque/mbaigo/pkg/usecases"
 )
 
 type requestEvent struct {

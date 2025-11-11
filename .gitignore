@@ -4,16 +4,39 @@
 *.dll
 *.so
 *.dylib
-*.html
-*.json
+
+# Binary output directory
+bin/
 
 # Test binary, built with `go test -c`
 *.test
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+.cover.out
+cover.html
 
-# Dependency directories (remove the comment below to include it)
+# Dependency directories
 vendor/
+
+# macOS
 .DS_Store
+
+# VS Code
 .vscode/launch.json
+
+# Configuration files (created at runtime)
+systemconfig.json
+
+# Private keys and certificates
+*.pem
+*.key
+*.csr
+*.crt
+
+# Go workspace file
+go.work
+go.work.sum
+
+# Environment files
+.env
