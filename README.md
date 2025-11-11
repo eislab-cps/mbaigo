@@ -444,7 +444,7 @@ Your system is now running! Try:
 curl http://localhost:8080/MySystem/example/random
 ```
 
-See the [Getting Started Guide](./docs/getting-started.md) for a complete tutorial.
+See the [Getting Started Guide](./GETTING-STARTED.md) for a quick start tutorial, or the [detailed guide](./docs/getting-started.md) for a complete 30-minute walkthrough.
 
 ### Basic Example
 
@@ -720,6 +720,14 @@ for _, asset := range assets {
     sys.UAssets[asset.GetName()] = &asset
 }
 ```
+
+### More Examples
+
+Check the [`examples/`](./examples/) directory for complete working examples:
+
+- **[three-sensors](./examples/three-sensors/)** - Temperature sensor, pressure sensor, and controller with configuration-driven instantiation
+- **[simple](./examples/simple/)** - Minimal working example
+- **[consumer-provider](./examples/consumer-provider/)** - Service interaction example
 
 ## CLI Reference
 
