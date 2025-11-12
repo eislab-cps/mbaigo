@@ -16,12 +16,18 @@
 
 ### Download Dependencies
 
-```bash
-go mod download        # Download modules
-go mod verify          # Verify checksums
+**Dependencies are automatically downloaded** when you run `go build`, `go test`, or `make build`.
 
-# Or use Make
-make deps              # Download and verify
+There's no need to run a separate download command in modern Go projects.
+
+```bash
+# Just build - dependencies download automatically
+go build ./...
+make build
+
+# Optional: Explicit download (rarely needed)
+go mod download        # Download modules to cache
+go mod verify          # Verify checksums
 ```
 
 ### Add New Dependencies
@@ -120,9 +126,9 @@ go test ./...
 ### Standard Operations
 
 ```bash
-make deps          # Download and verify dependencies
 make build         # Build all packages and CLI
 make test          # Run tests
+make vendor        # Vendor dependencies (optional)
 ```
 
 ### Development
@@ -222,8 +228,8 @@ Problems:
 ### After (Standard Go)
 
 ```bash
-# Dependencies (standard)
-go mod download    # or: make deps
+# Build (downloads dependencies automatically)
+make build
 
 # Optional dev tools (separate)
 make tools         # Clearly labeled as optional
@@ -231,6 +237,8 @@ make tools         # Clearly labeled as optional
 
 Benefits:
 - Follows Go best practices
+- Dependencies downloaded automatically
+- No confusing "deps" command
 - Clear separation of concerns
 - Standard commands everyone knows
 - Works with all Go tooling

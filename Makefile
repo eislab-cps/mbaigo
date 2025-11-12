@@ -1,15 +1,13 @@
 # Makefile for mbaigo
 # Uses scripts in /scripts directory following Go standard project layout
 
-.PHONY: help build test lint spellcheck runchecks analyse deps vendor tools clean
+.PHONY: help build test lint spellcheck runchecks analyse vendor tools clean
 
 # Default target
 help:
 	@echo "mbaigo - Makefile targets:"
 	@echo ""
 	@echo "Development:"
-	@echo "  make deps          - Download Go module dependencies"
-	@echo "  make vendor        - Vendor dependencies (optional)"
 	@echo "  make build         - Build all packages and CLI"
 	@echo "  make test          - Run tests with coverage"
 	@echo "  make lint          - Run linters and static analysis"
@@ -21,19 +19,13 @@ help:
 	@echo ""
 	@echo "Tools (optional):"
 	@echo "  make tools         - Install optional development tools"
+	@echo "  make vendor        - Vendor dependencies (optional)"
 	@echo ""
 	@echo "Cleanup:"
 	@echo "  make clean         - Clean up temporary files"
 	@echo "  make clean-vendor  - Remove vendor directory"
 	@echo ""
-	@echo "See scripts/README.md for more details"
-
-# Download Go module dependencies
-deps:
-	@echo "Downloading Go module dependencies..."
-	@go mod download
-	@go mod verify
-	@echo "✓ Dependencies downloaded and verified"
+	@echo "Note: Dependencies are downloaded automatically by 'go build'"
 
 # Vendor dependencies (optional, creates vendor/ directory)
 vendor:

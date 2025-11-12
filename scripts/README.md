@@ -23,7 +23,7 @@ go mod vendor
 Or use the Makefile:
 
 ```bash
-make deps      # Download and verify dependencies
+make build     # Build (downloads dependencies automatically)
 make vendor    # Vendor dependencies (optional)
 ```
 
@@ -93,10 +93,9 @@ Installs (globally):
 All scripts can be invoked via the Makefile:
 
 ```bash
-# Dependencies (standard go.mod)
-make deps           # Download and verify dependencies
-make vendor         # Vendor dependencies (optional)
+# Build
 make build          # Build all packages and CLI
+make vendor         # Vendor dependencies (optional)
 
 # Development
 make test           # Run tests
@@ -114,6 +113,8 @@ make tools          # Install optional development tools
 make clean          # Clean temporary files
 make clean-vendor   # Remove vendor directory
 ```
+
+**Note:** Dependencies are downloaded automatically by Go. No separate command needed.
 
 ## Prerequisites
 

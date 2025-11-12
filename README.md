@@ -235,8 +235,7 @@ Mandatory infrastructure in an Arrowhead Local Cloud:
 git clone https://github.com/eislab-cps/mbaigo.git
 cd mbaigo
 
-# Install dependencies and build
-make deps
+# Build (automatically downloads dependencies)
 make build
 
 # The mbaigo CLI will be available at ./bin/mbaigo
@@ -740,9 +739,6 @@ pkg/
 ### Building
 
 ```bash
-# Download dependencies
-go mod download
-
 # Build the module
 go build ./...
 
@@ -750,8 +746,7 @@ go build ./...
 go build -o bin/mbaigo ./cmd/mbaigo
 
 # Or use Make
-make deps      # Download dependencies
-make build     # Build everything (outputs to ./bin/)
+make build     # Build everything (outputs to ./bin/, downloads deps automatically)
 ```
 
 ### Running Tests

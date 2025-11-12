@@ -90,10 +90,7 @@ GOOS=darwin GOARCH=arm64 go build -o bin/mbaigo-darwin-arm64 ./cmd/mbaigo
 ### Build and Test
 
 ```bash
-# Download dependencies
-make deps
-
-# Build
+# Build (automatically downloads dependencies)
 make build
 
 # Test
@@ -117,12 +114,14 @@ make build
 
 ```bash
 make help          # Show all available targets
-make deps          # Download dependencies
 make build         # Build CLI to ./bin/mbaigo
 make test          # Run tests
 make lint          # Run linters
+make vendor        # Vendor dependencies (optional)
 make clean         # Remove binaries and temp files
 ```
+
+**Note:** Dependencies are downloaded automatically by Go. No separate `make deps` needed.
 
 ## Dependencies
 

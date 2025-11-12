@@ -14,10 +14,7 @@ This guide will help you create your first mbaigo application.
 git clone https://github.com/eislab-cps/mbaigo.git
 cd mbaigo
 
-# Install dependencies
-make deps
-
-# Build the CLI
+# Build the CLI (automatically downloads dependencies)
 make build
 
 # The mbaigo CLI will be available at ./bin/mbaigo
