@@ -47,213 +47,35 @@ mbaigo is a Go module that implements the **Arrowhead Framework** - a service-or
 
 ## Architecture
 
-### High-Level System Architecture
+mbaigo implements a hierarchical, service-oriented architecture based on the Arrowhead Framework.
 
-```mermaid
-graph TB
-    subgraph "Local Cloud"
-        SR[Service Registrar<br/>Core System]
-        ORC[Orchestrator<br/>Core System]
-        AUTH[Authorization<br/>Core System]
-        CA[Certificate Authority<br/>Core System]
-        MSG[Event Handler/Messenger<br/>Core System]
+### Core Concepts
 
-        subgraph "Provider System A"
-            SA[System<br/>Controller]
-            HA[Host<br/>Physical Device]
-            HSA[Husk<br/>Middleware/TLS]
-            UA1[Unit Asset 1<br/>Temperature Sensor]
-            UA2[Unit Asset 2<br/>Pressure Sensor]
+**System Hierarchy:**
+- **System** - Root container coordinating all components
+- **Host** - Physical/virtual machine (IP, MAC, certificates)
+- **Husk** - Middleware layer (TLS, protocols, ports)
+- **UnitAssets** - Domain-specific components (sensors, actuators, controllers)
 
-            SA --> HA
-            SA --> HSA
-            SA --> UA1
-            SA --> UA2
-        end
+**Service-Oriented Communication:**
+- **Services** - REST endpoints that UnitAssets provide to others
+- **Cervices** - Services that UnitAssets consume from others
+- **Forms** - Versioned data structures for exchange (JSON/XML)
 
-        subgraph "Consumer System B"
-            SB[System<br/>Controller]
-            HB[Host<br/>Physical Device]
-            HSB[Husk<br/>Middleware/TLS]
-            UB1[Unit Asset 3<br/>Controller]
+**Core Systems (Infrastructure):**
+- **Service Registrar** - Tracks all available services in the local cloud
+- **Orchestrator** - Handles service discovery and routing
+- **Certificate Authority** - Manages X.509 certificates for mutual TLS
+- **Event Handler** - Centralized logging and monitoring
 
-            SB --> HB
-            SB --> HSB
-            SB --> UB1
-        end
-    end
+### Service Interaction Flow
 
-    UA1 -->|1. Register<br/>Services| SR
-    UA2 -->|1. Register<br/>Services| SR
-    UB1 -->|2. Service<br/>Discovery| ORC
-    ORC -->|3. Service<br/>Location| UB1
-    UB1 -->|4. Consume<br/>Service| UA1
+1. **Registration**: Providers register services with the Service Registrar
+2. **Discovery**: Consumers query the Orchestrator to find service providers
+3. **Consumption**: Consumers make direct HTTP/HTTPS requests to providers
+4. **Re-registration**: Services periodically renew their registrations
 
-    SA -.->|Uses| CA
-    SB -.->|Uses| CA
-    SA -.->|Logs to| MSG
-    SB -.->|Logs to| MSG
-
-    style SR fill:#e1f5ff
-    style ORC fill:#e1f5ff
-    style AUTH fill:#e1f5ff
-    style CA fill:#e1f5ff
-    style MSG fill:#e1f5ff
-```
-
-### Component Hierarchy
-
-```mermaid
-graph LR
-    subgraph "System (Root Orchestrator)"
-        S[System]
-
-        subgraph "Host Layer"
-            H[HostingDevice<br/>Name, IP, MAC<br/>Certificate]
-        end
-
-        subgraph "Middleware Layer"
-            HS[Husk<br/>ProtoPort Map<br/>TLS Config<br/>Private Key]
-        end
-
-        subgraph "Asset Layer"
-            UA1[UnitAsset 1<br/>Services<br/>Cervices]
-            UA2[UnitAsset 2<br/>Services<br/>Cervices]
-            UA3[UnitAsset N<br/>Services<br/>Cervices]
-        end
-
-        subgraph "Core Systems"
-            CS1[Service Registrar]
-            CS2[Orchestrator]
-            CS3[Other Core<br/>Systems]
-        end
-
-        S --> H
-        S --> HS
-        S --> UA1
-        S --> UA2
-        S --> UA3
-        S --> CS1
-        S --> CS2
-        S --> CS3
-    end
-
-    style S fill:#ffeb99
-    style H fill:#b3d9ff
-    style HS fill:#b3d9ff
-    style UA1 fill:#c2f0c2
-    style UA2 fill:#c2f0c2
-    style UA3 fill:#c2f0c2
-    style CS1 fill:#ffcccc
-    style CS2 fill:#ffcccc
-    style CS3 fill:#ffcccc
-```
-
-### Service Registration Flow
-
-```mermaid
-sequenceDiagram
-    participant Sys as System Startup
-    participant Reg as Registration<br/>Goroutine
-    participant SR as Service Registrar<br/>(Lead)
-    participant UA as Unit Asset
-
-    Sys->>Sys: NewSystem()
-    Sys->>Sys: Load Config
-    Sys->>Sys: Create Unit Assets
-    Sys->>Sys: SetoutServers()
-    Sys->>Reg: RegisterServices()
-
-    loop Every 5 seconds
-        Reg->>SR: GET /status
-        SR-->>Reg: IsLead: true/false
-    end
-
-    loop For each service
-        Reg->>UA: GetServices()
-        UA-->>Reg: Service list
-        Reg->>Reg: Build ServiceRecord_v1
-        Reg->>SR: POST /register
-        SR-->>Reg: Registry ID
-        Note over Reg: Schedule re-registration<br/>before expiry
-    end
-
-    loop Re-registration
-        Note over Reg: Wait RegPeriod * 0.9
-        Reg->>SR: POST /register
-        SR-->>Reg: Registry ID (renewed)
-    end
-
-    Note over Sys: Ctrl+C / SIGINT
-    Sys->>Reg: Cancel Context
-    Reg->>SR: POST /unregister
-    Reg->>Reg: Exit goroutine
-```
-
-### Service Discovery and Consumption Flow
-
-```mermaid
-sequenceDiagram
-    participant Consumer as Consumer<br/>Unit Asset
-    participant Sys as Consumer<br/>System
-    participant Orc as Orchestrator
-    participant Provider as Provider<br/>System
-    participant ProvAsset as Provider<br/>Unit Asset
-
-    Consumer->>Consumer: Need service X
-    Consumer->>Sys: GetCervices()
-
-    alt Service not cached
-        Sys->>Sys: Build ServiceQuest_v1
-        Sys->>Orc: POST /squest
-        Note over Orc: Checks authorization<br/>Finds provider
-        Orc-->>Sys: ServicePoint_v1<br/>(Provider URL)
-        Sys->>Sys: Cache in Cervice.Nodes
-    end
-
-    Consumer->>Sys: GetState(cervice)
-    Sys->>Provider: HTTP GET<br/>/SystemName/AssetName/ServiceName
-
-    Provider->>Provider: Route to handler
-    Provider->>ProvAsset: Serving(w, r, "ServiceName")
-    ProvAsset->>ProvAsset: Generate response<br/>(SignalA_v1a, etc.)
-    ProvAsset->>Provider: Pack(form)
-    Provider-->>Sys: HTTP Response<br/>(JSON/XML)
-
-    Sys->>Sys: Unpack(response)
-    Sys-->>Consumer: Parsed form data
-    Consumer->>Consumer: Process data
-```
-
-### Data Exchange Forms
-
-```mermaid
-graph TD
-    F[Form Interface<br/>Version, TypeName]
-
-    F --> SR[ServiceRecord_v1<br/>Service Registration]
-    F --> SQ[ServiceQuest_v1<br/>Service Discovery Query]
-    F --> SP[ServicePoint_v1<br/>Service Location Result]
-    F --> SA[SignalA_v1a<br/>Analog Signal<br/>float64 + unit]
-    F --> SB[SignalB_v1a<br/>Digital Signal<br/>bool + timestamp]
-    F --> MR[MessengerRegistration_v1<br/>Logging System]
-    F --> SM[SystemMessage_v1<br/>Log Messages]
-    F --> AC[ActivityCostForm_v1<br/>Service Costs]
-    F --> FF[FileForm_v1<br/>File Transfer]
-    F --> SRL[SystemRecordList_v1<br/>System Listing]
-
-    style F fill:#ffffcc
-    style SR fill:#d9f2d9
-    style SQ fill:#d9f2d9
-    style SP fill:#d9f2d9
-    style SA fill:#ffdddd
-    style SB fill:#ffdddd
-    style MR fill:#e6e6ff
-    style SM fill:#e6e6ff
-    style AC fill:#ffe6cc
-    style FF fill:#ffe6cc
-    style SRL fill:#f0e6ff
-```
+For detailed architecture diagrams and flows, see [Architecture Documentation](./docs/ARCHITECTURE.MD).
 
 ## Project Structure
 
@@ -273,10 +95,10 @@ mbaigo/
 │   ├── simple/             # Basic example
 │   └── consumer-provider/  # Service interaction example
 ├── docs/                   # Documentation
-│   ├── getting-started.md  # Tutorial guide
-│   ├── cli-reference.md    # CLI documentation
-│   ├── architecture.md     # Architecture overview
-│   └── usecases.md         # Use cases documentation
+│   ├── GETTING-STARTED.MD  # Tutorial guide
+│   ├── CLI-REFERENCE.MD    # CLI documentation
+│   ├── ARCHITECTURE.MD     # Architecture overview with diagrams
+│   └── USECASES.MD         # Use cases documentation
 ├── scripts/                # Build and development scripts
 │   ├── test.sh
 │   ├── lint.sh
@@ -400,51 +222,157 @@ Mandatory infrastructure in an Arrowhead Local Cloud:
 
 ### Prerequisites
 
-- Go 1.24.4 or later
-- Access to an Arrowhead Local Cloud (Core Systems)
-- X.509 certificates (or ability to request them from CA)
+- Go 1.21 or later
+- Basic understanding of Go programming
+- (Optional) Access to Arrowhead Core Systems for service discovery
 
 ### Installation
 
-#### Install the CLI
+#### Option 1: Build from Source
 
 ```bash
-# Install the mbaigo CLI tool
-go install github.com/sdoque/mbaigo/cmd/mbaigo@latest
+# Clone the repository
+git clone https://github.com/eislab-cps/mbaigo.git
+cd mbaigo
 
-# Verify installation
-mbaigo version
+# Install dependencies and build
+make deps
+make build
+
+# The mbaigo CLI will be available at ./bin/mbaigo
 ```
 
-#### Use as a Library
+#### Option 2: Install as Library
 
 ```bash
 go get github.com/sdoque/mbaigo
 ```
 
-### Quick Start with CLI
+### Quick Start: Your First System
 
-The fastest way to get started is using the `mbaigo` CLI:
+#### 1. Create a New Project
 
 ```bash
-# 1. Initialize a new system
-mbaigo init --name MySystem --cloud LocalCloud
+# Create project directory (outside mbaigo library)
+mkdir my-iot-system
+cd my-iot-system
+```
 
-# 2. Generate an example application
-mbaigo generate example > main.go
+#### 2. Initialize Your System
 
-# 3. Run your system
-go mod init my-system
+```bash
+# Initialize with mbaigo CLI
+~/path/to/mbaigo/bin/mbaigo init --name MySystem --cloud LocalCloud
+
+# This creates:
+# - systemconfig.json (system configuration)
+# - main.go (application entry point)
+```
+
+#### 3. Setup Go Module
+
+```bash
+go mod init my-iot-system
 go mod tidy
-go run main.go
 ```
 
-Your system is now running! Try:
+#### 4. Generate Assets (Optional)
+
 ```bash
-curl http://localhost:8080/MySystem/example/random
+# Generate asset templates
+~/path/to/mbaigo/bin/mbaigo generate asset --name TemperatureSensor
+~/path/to/mbaigo/bin/mbaigo generate asset --name PressureSensor
 ```
 
-See the [Getting Started Guide](./GETTING-STARTED.md) for a quick start tutorial, or the [detailed guide](./docs/getting-started.md) for a complete 30-minute walkthrough.
+This creates asset files like:
+- `temperaturesensor_asset.go`
+- `pressuresensor_asset.go`
+
+#### 5. Configure Assets
+
+Edit `systemconfig.json` to define your assets:
+
+```json
+{
+  "systemName": "MySystem",
+  "localCloud": "LocalCloud",
+  "protocolsNports": {
+    "http": 8080
+  },
+  "unit_assets": [
+    {
+      "name": "TempSensor1",
+      "details": {
+        "type": ["TemperatureSensor"]
+      },
+      "services": [
+        {
+          "subpath": "temperature",
+          "definition": "temperature-reading",
+          "details": {
+            "Forms": ["SignalA_v1a"]
+          }
+        }
+      ],
+      "traits": [
+        {
+          "minValue": 0,
+          "maxValue": 50
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### 6. Run Your System
+
+```bash
+go run *.go
+```
+
+You should see:
+
+```
+🚀 System Started!
+=============================================================
+System Name:  MySystem
+Local Cloud:  LocalCloud
+HTTP:         http://localhost:8080
+
+📍 Available Endpoints:
+  GET /MySystem/TempSensor1/temperature
+=============================================================
+```
+
+#### 7. Test Your Services
+
+In another terminal:
+
+```bash
+# Test temperature sensor
+curl http://localhost:8080/MySystem/TempSensor1/temperature
+
+# Expected response:
+# {"value":25,"unit":"celsius","timestamp":"2025-11-11T23:35:58+01:00","version":"SignalA_v1.0"}
+```
+
+### Working Example
+
+A complete working example is available in [`examples/three-sensors/`](./examples/three-sensors/):
+
+```bash
+cd examples/three-sensors
+go run *.go
+```
+
+This example includes:
+- Temperature sensor with configurable min/max range
+- Pressure sensor with simulated readings
+- Controller with boolean status
+- Multi-process service-oriented architecture setup
+
+For detailed documentation on the example, see the [Three Sensors README](./examples/three-sensors/README.md).
 
 ### Basic Example
 
@@ -773,7 +701,7 @@ mbaigo cert create-csr
 mbaigo system info --json
 ```
 
-For complete CLI documentation, see [CLI Reference](./docs/cli-reference.md).
+For complete CLI documentation, see [CLI Reference](./docs/CLI-REFERENCE.MD).
 
 ## Development
 

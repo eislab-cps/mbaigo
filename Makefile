@@ -44,7 +44,7 @@ vendor:
 # Build all packages and the CLI
 build:
 	@echo "Building packages..."
-	@go build ./...
+	@go build ./pkg/... ./internal/... ./cmd/...
 	@echo "Building CLI..."
 	@mkdir -p bin
 	@go build -o bin/mbaigo ./cmd/mbaigo

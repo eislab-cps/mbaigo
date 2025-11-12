@@ -1,10 +1,257 @@
 # mbaigo Architecture
 
-This document describes the architectural design and principles of mbaigo.
+This document describes the architectural design and principles of mbaigo, including detailed diagrams of system structure, service flows, and data exchange patterns.
 
 ## Overview
 
 mbaigo implements the **Arrowhead Framework** - a service-oriented architecture (SOA) for building distributed systems of systems. It's specifically designed for cyber-physical systems (CPS) and IoT applications.
+
+## High-Level System Architecture
+
+```mermaid
+graph TB
+    subgraph cloud["Local Cloud Infrastructure"]
+        SR["Service Registrar
+        Core System"]
+        ORC["Orchestrator
+        Core System"]
+        AUTH["Authorization
+        Core System"]
+        CA["Certificate Authority
+        Core System"]
+        MSG["Event Handler/Messenger
+        Core System"]
+
+        subgraph sysA["Provider System A"]
+            SA["System
+            Controller"]
+            HA["Host
+            Physical Device"]
+            HSA["Husk
+            Middleware/TLS"]
+            UA1["Unit Asset 1
+            Temperature Sensor"]
+            UA2["Unit Asset 2
+            Pressure Sensor"]
+
+            SA --> HA
+            SA --> HSA
+            SA --> UA1
+            SA --> UA2
+        end
+
+        subgraph sysB["Consumer System B"]
+            SB["System
+            Controller"]
+            HB["Host
+            Physical Device"]
+            HSB["Husk
+            Middleware/TLS"]
+            UB1["Unit Asset 3
+            Controller"]
+
+            SB --> HB
+            SB --> HSB
+            SB --> UB1
+        end
+    end
+
+    UA1 -->|"1. Register Services"| SR
+    UA2 -->|"1. Register Services"| SR
+    UB1 -->|"2. Service Discovery"| ORC
+    ORC -->|"3. Service Location"| UB1
+    UB1 -->|"4. Consume Service"| UA1
+
+    SA -.->|Uses| CA
+    SB -.->|Uses| CA
+    SA -.->|Logs to| MSG
+    SB -.->|Logs to| MSG
+
+    style SR fill:#e1f5ff,stroke:#333,stroke-width:2px
+    style ORC fill:#e1f5ff,stroke:#333,stroke-width:2px
+    style AUTH fill:#e1f5ff,stroke:#333,stroke-width:2px
+    style CA fill:#e1f5ff,stroke:#333,stroke-width:2px
+    style MSG fill:#e1f5ff,stroke:#333,stroke-width:2px
+```
+
+## Component Hierarchy
+
+```mermaid
+graph LR
+    subgraph system["System - Root Orchestrator"]
+        S[System]
+
+        subgraph host["Host Layer"]
+            H["HostingDevice
+            Name, IP, MAC
+            Certificate"]
+        end
+
+        subgraph middleware["Middleware Layer"]
+            HS["Husk
+            ProtoPort Map
+            TLS Config
+            Private Key"]
+        end
+
+        subgraph assets["Asset Layer"]
+            UA1["UnitAsset 1
+            Services
+            Cervices"]
+            UA2["UnitAsset 2
+            Services
+            Cervices"]
+            UA3["UnitAsset N
+            Services
+            Cervices"]
+        end
+
+        subgraph core["Core Systems"]
+            CS1[Service Registrar]
+            CS2[Orchestrator]
+            CS3["Other Core
+            Systems"]
+        end
+
+        S --> H
+        S --> HS
+        S --> UA1
+        S --> UA2
+        S --> UA3
+        S --> CS1
+        S --> CS2
+        S --> CS3
+    end
+
+    style S fill:#ffeb99,stroke:#333,stroke-width:3px
+    style H fill:#b3d9ff,stroke:#333,stroke-width:2px
+    style HS fill:#b3d9ff,stroke:#333,stroke-width:2px
+    style UA1 fill:#c2f0c2,stroke:#333,stroke-width:2px
+    style UA2 fill:#c2f0c2,stroke:#333,stroke-width:2px
+    style UA3 fill:#c2f0c2,stroke:#333,stroke-width:2px
+    style CS1 fill:#ffcccc,stroke:#333,stroke-width:2px
+    style CS2 fill:#ffcccc,stroke:#333,stroke-width:2px
+    style CS3 fill:#ffcccc,stroke:#333,stroke-width:2px
+```
+
+## Service Registration Flow
+
+```mermaid
+sequenceDiagram
+    participant Sys as System Startup
+    participant Reg as Registration Goroutine
+    participant SR as Service Registrar Lead
+    participant UA as Unit Asset
+
+    Sys->>Sys: NewSystem()
+    Sys->>Sys: Load Config
+    Sys->>Sys: Create Unit Assets
+    Sys->>Sys: SetoutServers()
+    Sys->>Reg: RegisterServices()
+
+    loop Every 5 seconds
+        Reg->>SR: GET /status
+        SR-->>Reg: IsLead: true/false
+    end
+
+    loop For each service
+        Reg->>UA: GetServices()
+        UA-->>Reg: Service list
+        Reg->>Reg: Build ServiceRecord_v1
+        Reg->>SR: POST /register
+        SR-->>Reg: Registry ID
+        Note over Reg: Schedule re-registration before expiry
+    end
+
+    loop Re-registration
+        Note over Reg: Wait RegPeriod * 0.9
+        Reg->>SR: POST /register
+        SR-->>Reg: Registry ID renewed
+    end
+
+    Note over Sys: Ctrl+C / SIGINT
+    Sys->>Reg: Cancel Context
+    Reg->>SR: POST /unregister
+    Reg->>Reg: Exit goroutine
+```
+
+## Service Discovery and Consumption Flow
+
+```mermaid
+sequenceDiagram
+    participant Consumer as Consumer Unit Asset
+    participant Sys as Consumer System
+    participant Orc as Orchestrator
+    participant Provider as Provider System
+    participant ProvAsset as Provider Unit Asset
+
+    Consumer->>Consumer: Need service X
+    Consumer->>Sys: GetCervices()
+
+    alt Service not cached
+        Sys->>Sys: Build ServiceQuest_v1
+        Sys->>Orc: POST /squest
+        Note over Orc: Checks authorization and finds provider
+        Orc-->>Sys: ServicePoint_v1 with Provider URL
+        Sys->>Sys: Cache in Cervice.Nodes
+    end
+
+    Consumer->>Sys: GetState(cervice)
+    Sys->>Provider: HTTP GET /SystemName/AssetName/ServiceName
+
+    Provider->>Provider: Route to handler
+    Provider->>ProvAsset: Serving(w, r, ServiceName)
+    ProvAsset->>ProvAsset: Generate response (SignalA_v1a, etc.)
+    ProvAsset->>Provider: Pack(form)
+    Provider-->>Sys: HTTP Response JSON/XML
+
+    Sys->>Sys: Unpack(response)
+    Sys-->>Consumer: Parsed form data
+    Consumer->>Consumer: Process data
+```
+
+## Data Exchange Forms
+
+```mermaid
+graph TD
+    F["Form Interface
+    Version, TypeName"]
+
+    F --> SR["ServiceRecord_v1
+    Service Registration"]
+    F --> SQ["ServiceQuest_v1
+    Service Discovery Query"]
+    F --> SP["ServicePoint_v1
+    Service Location Result"]
+    F --> SA["SignalA_v1a
+    Analog Signal
+    float64 + unit"]
+    F --> SB["SignalB_v1a
+    Digital Signal
+    bool + timestamp"]
+    F --> MR["MessengerRegistration_v1
+    Logging System"]
+    F --> SM["SystemMessage_v1
+    Log Messages"]
+    F --> AC["ActivityCostForm_v1
+    Service Costs"]
+    F --> FF["FileForm_v1
+    File Transfer"]
+    F --> SRL["SystemRecordList_v1
+    System Listing"]
+
+    style F fill:#ffffcc,stroke:#333,stroke-width:3px
+    style SR fill:#d9f2d9,stroke:#333,stroke-width:2px
+    style SQ fill:#d9f2d9,stroke:#333,stroke-width:2px
+    style SP fill:#d9f2d9,stroke:#333,stroke-width:2px
+    style SA fill:#ffdddd,stroke:#333,stroke-width:2px
+    style SB fill:#ffdddd,stroke:#333,stroke-width:2px
+    style MR fill:#e6e6ff,stroke:#333,stroke-width:2px
+    style SM fill:#e6e6ff,stroke:#333,stroke-width:2px
+    style AC fill:#ffe6cc,stroke:#333,stroke-width:2px
+    style FF fill:#ffe6cc,stroke:#333,stroke-width:2px
+    style SRL fill:#f0e6ff,stroke:#333,stroke-width:2px
+```
 
 ## Core Architecture Principles
 
@@ -216,6 +463,7 @@ usecases.RegisterAssetFactory("MyAsset", NewMyAsset)
 ## Further Reading
 
 - [Arrowhead Framework Documentation](https://arrowhead.eu/)
-- [Components Package](components.md)
-- [Forms Package](forms.md)
-- [Use Cases Package](usecases.md)
+- [Arrowhead Framework GitHub](https://github.com/eclipse-arrowhead)
+- [Getting Started Guide](./GETTING-STARTED.md)
+- [CLI Reference](./CLI-REFERENCE.md)
+- [Use Cases](./USECASES.md)

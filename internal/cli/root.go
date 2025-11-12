@@ -30,6 +30,7 @@ func init() {
 	rootCmd.AddCommand(serviceCmd)
 	rootCmd.AddCommand(certCmd)
 	rootCmd.AddCommand(generateCmd)
+	rootCmd.AddCommand(coreCmd)
 }
 
 var rootCmd = &cobra.Command{

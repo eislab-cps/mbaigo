@@ -108,9 +108,9 @@ go run main.go
 ### Documentation
 
 Comprehensive documentation is now in `/docs`:
-- `docs/architecture.md` - System architecture
-- `docs/usecases.md` - Use cases documentation
-- `docs/migration-guide.md` - This guide
+- `docs/ARCHITECTURE.MD` - System architecture
+- `docs/USECASES.MD` - Use cases documentation
+- `docs/MIGRATION-GUIDE.MD` - This guide
 
 ### Build Scripts
 

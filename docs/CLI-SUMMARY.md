@@ -82,7 +82,7 @@ internal/cli/
 
 ## Documentation Created
 
-### 1. **CLI Reference** (`docs/cli-reference.md`)
+### 1. **CLI Reference** (`docs/CLI-REFERENCE.MD`)
 Complete documentation covering:
 - Installation instructions
 - All commands with examples
@@ -91,7 +91,7 @@ Complete documentation covering:
 - Common workflows
 - Tips and best practices
 
-### 2. **Getting Started Guide** (`docs/getting-started.md`)
+### 2. **Getting Started Guide** (`docs/GETTING-STARTED.MD`)
 Step-by-step tutorial including:
 - Installation
 - Quick start (5 minutes)
@@ -205,8 +205,8 @@ mbaigo/
 ├── internal/cli/        # ← CLI implementation
 ├── pkg/                 # ← Used by CLI for types and logic
 ├── docs/                # ← CLI documentation
-│   ├── cli-reference.md
-│   └── getting-started.md
+│   ├── CLI-REFERENCE.MD
+│   └── GETTING-STARTED.MD
 └── examples/            # ← Referenced by CLI
 ```
 
@@ -218,7 +218,7 @@ mbaigo/
    ```
 
 2. **Follow the Getting Started Guide:**
-   - Read `docs/getting-started.md`
+   - Read `docs/GETTING-STARTED.MD`
    - Build first system in 5 minutes
    - Customize for real use cases
 

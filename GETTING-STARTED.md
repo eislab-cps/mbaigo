@@ -312,8 +312,8 @@ Your HTTP services will still work locally. These warnings only affect Arrowhead
 
 ## Documentation
 
-- [CLI Reference](docs/cli-reference.md) - Complete CLI command documentation
-- [Architecture](docs/architecture.md) - System design and components
+- [CLI Reference](docs/CLI-REFERENCE.MD) - Complete CLI command documentation
+- [Architecture](docs/ARCHITECTURE.MD) - System design and components
 - [Examples](examples/) - Working example applications
 
 ## Get Help

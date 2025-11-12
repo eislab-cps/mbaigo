@@ -61,8 +61,8 @@ mbaigo generate example > main.go
 
 ## Documentation
 
-- [CLI Reference](../../docs/cli-reference.md) - Complete command documentation
-- [Getting Started](../../docs/getting-started.md) - Step-by-step tutorial
+- [CLI Reference](../../docs/CLI-REFERENCE.MD) - Complete command documentation
+- [Getting Started](../../docs/GETTING-STARTED.MD) - Step-by-step tutorial
 - [Examples](../../examples/) - Working examples
 
 ## Global Flags
