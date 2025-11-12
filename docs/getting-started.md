@@ -437,8 +437,8 @@ Update your system to use the certificates (see examples/consumer-provider for f
    ```
 
 2. **Read the Architecture:**
-   - [Architecture Documentation](./architecture.md)
-   - [CLI Reference](./cli-reference.md)
+   - [Architecture Documentation](./ARCHITECTURE.MD)
+   - [CLI Reference](./CLI-REFERENCE.MD)
 
 3. **Add More Services:**
    ```bash

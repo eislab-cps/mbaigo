@@ -1,81 +1,52 @@
 # mbaigo Documentation
 
-Welcome to the mbaigo documentation. This directory contains comprehensive guides and references for using the mbaigo library.
-
-## Available Documentation
-
-### [Architecture](./architecture.md)
-Complete architectural overview of mbaigo including:
-- Core architecture principles
-- Package organization
-- Key architectural patterns
-- Data flow and concurrency model
-- Security considerations
-- Performance characteristics
-
-### [Use Cases](./usecases.md)
-Detailed explanation of the use cases package:
-- Authentication and certification
-- Configuration management
-- Service consumption and provision
-- Service registration and discovery
-- Cost handling
-- Knowledge graph generation
-
-### [Migration Guide](./migration-guide.md)
-Guide for updating existing code after the Go Standard Project Layout reorganization:
-- Import path changes
-- Migration steps
-- New features
-- Breaking changes
+Complete documentation for building Arrowhead Framework systems in Go.
 
 ## Quick Links
 
-- [Main README](../README.md) - Project overview and getting started
-- [Examples](../examples/) - Runnable example applications
-- [Build Scripts](../scripts/) - Development and build scripts
-- [API Reference](https://pkg.go.dev/github.com/sdoque/mbaigo) - Auto-generated API docs
+- **[Getting Started](./GETTING-STARTED.MD)** - Step-by-step tutorial from zero to running system
+- **[Architecture](./ARCHITECTURE.MD)** - System design, diagrams, and patterns
+- **[CLI Reference](./CLI-REFERENCE.MD)** - Complete command-line interface guide
+- **[Main README](../README.md)** - Quick start and overview
 
-## Package Documentation
+## Documentation Structure
 
-### Components (`pkg/components`)
-System structure models - the building blocks of Arrowhead systems:
-- **System**: Root orchestrator
-- **HostingDevice**: Physical/virtual machine representation
-- **Husk**: Middleware and security layer
-- **Service & Cervice**: Service definitions
-- **UnitAsset**: Interface for domain implementations
+### Core Guides
 
-### Forms (`pkg/forms`)
-Data exchange schemas with versioning support:
-- Service forms (registration, discovery)
-- Signal forms (analog, digital)
-- System forms (messages, costs)
-- Certificate forms
+| Document | Purpose | Audience |
+|----------|---------|----------|
+| [GETTING-STARTED.MD](./GETTING-STARTED.MD) | Hands-on tutorial | New users |
+| [ARCHITECTURE.MD](./ARCHITECTURE.MD) | Design and diagrams | Developers |
+| [CLI-REFERENCE.MD](./CLI-REFERENCE.MD) | CLI commands | All users |
 
-### Use Cases (`pkg/usecases`)
-Business logic and common system behaviors:
-- Registration and service discovery
-- Consumption and provision
-- Configuration and authentication
-- Documentation and knowledge graphs
+### Package Documentation
+
+- **Components** (`pkg/components`) - System structure (System, Host, Husk, UnitAsset)
+- **Forms** (`pkg/forms`) - Data exchange schemas (ServiceRecord, SignalA, etc.)
+- **Use Cases** (`pkg/usecases`) - Business logic (registration, discovery, consumption)
+
+See [pkg.go.dev](https://pkg.go.dev/github.com/sdoque/mbaigo/pkg) for API reference.
 
 ## Getting Help
 
-1. **Start with examples**: Check [/examples](../examples/) for working code
-2. **Read the architecture**: Understand the design in [architecture.md](./architecture.md)
-3. **Check use cases**: See how components work together in [usecases.md](./usecases.md)
-4. **API reference**: Browse godoc for detailed API documentation
+**New to mbaigo?**
+1. Read the [main README](../README.md) for 3-minute quick start
+2. Follow [GETTING-STARTED.MD](./GETTING-STARTED.MD) for detailed tutorial
+3. Run the [examples](../examples/three-sensors/)
 
-## Contributing to Documentation
+**Building a system?**
+1. Use `./bin/mbaigo init` to create project
+2. Check [CLI-REFERENCE.MD](./CLI-REFERENCE.MD) for commands
+3. Read [ARCHITECTURE.MD](./ARCHITECTURE.MD) for design patterns
 
-When contributing documentation:
-1. Use clear, concise language
-2. Provide code examples where appropriate
-3. Include diagrams for complex concepts
-4. Keep documents focused on a single topic
-5. Update this index when adding new documents
+**Contributing?**
+1. Understand the architecture
+2. Run `make test` and `make lint`
+3. Follow Go standard practices
 
-## Document Versioning
+## Examples
 
-Documentation is versioned with the code. The current documentation corresponds to the latest version in the main branch.
+Working example applications in [/examples](../examples/):
+- **three-sensors** - Complete multi-process SOA system
+
+Each example has its own README with setup instructions.
