@@ -23,4 +23,4 @@ echo "Running govulncheck..."
 govulncheck -test ./...
 
 echo ""
-echo "✓ All linters passed!"
+echo "All linters passed!"

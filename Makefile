@@ -1,7 +1,7 @@
 # Makefile for mbaigo
 # Uses scripts in /scripts directory following Go standard project layout
 
-.PHONY: help build install test lint spellcheck runchecks analyse vendor tools clean
+.PHONY: help build install test lint spellcheck runchecks analyse vendor tools clean docker-build docker-up docker-down docker-logs docker-clean
 
 # Default target
 help:
@@ -14,6 +14,13 @@ help:
 	@echo "  make lint          - Run linters and static analysis"
 	@echo "  make spellcheck    - Run spell checker"
 	@echo "  make runchecks     - Run all checks (test + lint + spellcheck)"
+	@echo ""
+	@echo "Docker:"
+	@echo "  make docker-build  - Build Docker images"
+	@echo "  make docker-up     - Start all services with Docker Compose"
+	@echo "  make docker-down   - Stop all Docker services"
+	@echo "  make docker-logs   - View logs from all services"
+	@echo "  make docker-clean  - Stop services and remove volumes"
 	@echo ""
 	@echo "Analysis:"
 	@echo "  make analyse       - Generate detailed coverage report"
@@ -32,7 +39,7 @@ help:
 vendor:
 	@echo "Vendoring dependencies..."
 	@go mod vendor
-	@echo "✓ Dependencies vendored to ./vendor"
+	@echo "Dependencies vendored to ./vendor"
 
 # Build all packages and the CLI
 build:
@@ -41,7 +48,7 @@ build:
 	@echo "Building CLI..."
 	@mkdir -p bin
 	@go build -o bin/mbaigo ./cmd/mbaigo
-	@echo "✓ Build complete: bin/mbaigo"
+	@echo "Build complete: bin/mbaigo"
 
 # Install CLI to /usr/local/bin
 install:
@@ -51,7 +58,7 @@ install:
 	fi
 	@echo "Installing mbaigo to /usr/local/bin..."
 	@cp bin/mbaigo /usr/local/bin/
-	@echo "✓ Installed: /usr/local/bin/mbaigo"
+	@echo "Installed: /usr/local/bin/mbaigo"
 	@echo ""
 	@echo "You can now use 'mbaigo' from anywhere:"
 	@echo "  mbaigo --help"
@@ -72,7 +79,7 @@ spellcheck:
 # Run all checks
 runchecks: test lint spellcheck
 	@echo ""
-	@echo "✓ All checks passed!"
+	@echo "All checks passed!"
 
 # Generate detailed coverage report
 analyse:
@@ -90,9 +97,42 @@ clean:
 	@rm -f pkg/**/systemconfig.json
 	@rm -f examples/**/systemconfig.json
 	@rm -f tests/systemconfig.json
-	@echo "✓ Cleaned up temporary files"
+	@echo "Cleaned up temporary files"
 
 # Remove vendor directory
 clean-vendor:
 	@rm -rf vendor
-	@echo "✓ Removed vendor directory"
+	@echo "Removed vendor directory"
+
+# Docker targets
+docker-build:
+	@echo "Building Docker images..."
+	@docker-compose build
+	@echo "Docker images built"
+
+docker-up:
+	@echo "Starting services with Docker Compose..."
+	@docker-compose up -d --build
+	@echo ""
+	@echo "Services started!"
+	@echo ""
+	@echo "Services running:"
+	@echo "  ESR:          http://localhost:20102/serviceregistrar/registry/status"
+	@echo "  Orchestrator: http://localhost:20103/orchestrator/orchestration/status"
+	@echo "  Application:  http://localhost:8080/MySystem/TempSensor1/temperature"
+	@echo ""
+	@echo "View logs:  make docker-logs"
+	@echo "Stop:       make docker-down"
+
+docker-down:
+	@echo "Stopping Docker services..."
+	@docker-compose down
+	@echo "Services stopped"
+
+docker-logs:
+	@docker-compose logs -f
+
+docker-clean:
+	@echo "Stopping services and removing volumes..."
+	@docker-compose down -v
+	@echo "Services stopped and volumes removed"

@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  # ESR - Service Registry (Core System)
+  esr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mbaigo-esr
+    command: ["mbaigo", "core", "start", "esr"]
+    ports:
+      - "20102:20102"
+    networks:
+      - mbaigo-network
+    volumes:
+      - esr-data:/app/systems/esr
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:20102/serviceregistrar/registry/status"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  # Orchestrator (Core System)
+  orchestrator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mbaigo-orchestrator
+    command: ["mbaigo", "core", "start", "orchestrator"]
+    ports:
+      - "20103:20103"
+    networks:
+      - mbaigo-network
+    volumes:
+      - orchestrator-data:/app/systems/orchestrator
+    depends_on:
+      esr:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:20103/orchestrator/orchestration/status"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  # Three Sensors Example Application
+  three-sensors:
+    build:
+      context: .
+      dockerfile: examples/three-sensors/Dockerfile
+    container_name: mbaigo-three-sensors
+    ports:
+      - "8080:8080"
+    networks:
+      - mbaigo-network
+    volumes:
+      - three-sensors-data:/app
+    depends_on:
+      esr:
+        condition: service_healthy
+      orchestrator:
+        condition: service_healthy
+    environment:
+      - ESR_URL=http://esr:20102/serviceregistrar/registry
+      - ORCHESTRATOR_URL=http://orchestrator:20103/orchestrator/orchestration
+    restart: unless-stopped
+
+networks:
+  mbaigo-network:
+    driver: bridge
+
+volumes:
+  esr-data:
+  orchestrator-data:
+  three-sensors-data:

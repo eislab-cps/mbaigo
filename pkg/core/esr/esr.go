@@ -87,11 +87,13 @@ func Start(ctx context.Context) error {
 		sys.UAssets[ua.GetName()] = &ua
 	}
 
-	// Generate PKI keys and CSR to obtain a authentication certificate from the CA
-	usecases.RequestCertificate(&sys)
+	// Note: Certificate authentication disabled for basic tutorial
+	// Uncomment the following line if you have a CA system running:
+	// usecases.RequestCertificate(&sys)
 
-	// Register the (system) and its services
-	usecases.RegisterServices(&sys)
+	// Note: Service registration disabled for ESR (it's the registry itself)
+	// Uncomment the following line if you want ESR to register its own services:
+	// usecases.RegisterServices(&sys)
 
 	// start the http handler and server
 	go usecases.SetoutServers(&sys)

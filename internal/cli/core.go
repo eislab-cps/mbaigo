@@ -40,7 +40,7 @@ var coreListCmd = &cobra.Command{
 			})
 		}
 
-		fmt.Println("🔧 Available Core Systems")
+		fmt.Println("Available Core Systems")
 		fmt.Println(repeat("=", 60))
 
 		if len(systems) == 0 {
@@ -60,7 +60,7 @@ var coreListCmd = &cobra.Command{
 		}
 
 		fmt.Println(repeat("=", 60))
-		fmt.Println("\n💡 Usage:")
+		fmt.Println("\nUsage:")
 		fmt.Println("  mbaigo core start <system-name>")
 
 		return nil
@@ -181,7 +181,7 @@ func getAvailableCoreSystems() ([]CoreSystemInfo, error) {
 
 // startCoreSystem starts a specific core system (embedded)
 func startCoreSystem(systemName string) error {
-	fmt.Printf("🚀 Starting %s (embedded)...\n", systemName)
+	fmt.Printf("Starting %s (embedded)...\n", systemName)
 	fmt.Println(repeat("=", 60))
 
 	// Create context with cancellation

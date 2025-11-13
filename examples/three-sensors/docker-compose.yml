@@ -1,0 +1,88 @@
+version: '3.8'
+
+# Complete three-sensors example with core systems
+# Run from this directory: docker-compose up --build
+
+services:
+  # ESR - Service Registry (Core System)
+  esr:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    container_name: three-sensors-esr
+    command: ["mbaigo", "core", "start", "esr"]
+    ports:
+      - "20102:20102"
+    networks:
+      - three-sensors-network
+    volumes:
+      - esr-data:/app/systems/esr
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:20102/serviceregistrar/registry/status"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  # Orchestrator (Core System)
+  orchestrator:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    container_name: three-sensors-orchestrator
+    command: ["mbaigo", "core", "start", "orchestrator"]
+    ports:
+      - "20103:20103"
+    networks:
+      - three-sensors-network
+    volumes:
+      - orchestrator-data:/app/systems/orchestrator
+    depends_on:
+      esr:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:20103/orchestrator/orchestration/status"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  # Three Sensors Application
+  application:
+    build:
+      context: ../..
+      dockerfile: examples/three-sensors/Dockerfile
+    container_name: three-sensors-app
+    ports:
+      - "8080:8080"
+    networks:
+      - three-sensors-network
+    volumes:
+      - app-data:/app
+    depends_on:
+      esr:
+        condition: service_healthy
+      orchestrator:
+        condition: service_healthy
+    environment:
+      # Core system URLs (using container names for internal networking)
+      - ESR_URL=http://esr:20102/serviceregistrar/registry
+      - ORCHESTRATOR_URL=http://orchestrator:20103/orchestrator/orchestration
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/MySystem/TempSensor1/temperature"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+
+networks:
+  three-sensors-network:
+    driver: bridge
+
+volumes:
+  esr-data:
+  orchestrator-data:
+  app-data:

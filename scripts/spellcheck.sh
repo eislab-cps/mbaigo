@@ -14,4 +14,4 @@ echo "Running spell checker..."
 typos .
 
 echo ""
-echo "✓ Spell check passed!"
+echo "Spell check passed!"

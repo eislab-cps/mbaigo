@@ -49,7 +49,7 @@ cd my-arrowhead-system
 # Initialize the system configuration
 mbaigo init --name TemperatureMonitor --cloud SmartBuilding
 
-# ✓ Created configuration file: systemconfig.json
+# Created configuration file: systemconfig.json
 ```
 
 This creates a `systemconfig.json` file with basic structure.
@@ -98,7 +98,7 @@ Expected output:
 }
 ```
 
-🎉 **Congratulations!** You've just created and run your first Arrowhead system!
+**Congratulations!** You've just created and run your first Arrowhead system!
 
 ---
 
@@ -277,7 +277,7 @@ Verify configuration:
 
 ```bash
 mbaigo config validate
-# ✓ Configuration is valid
+# Configuration is valid
 
 mbaigo system info
 # Shows your configured system
@@ -332,10 +332,10 @@ func main() {
 	go usecases.SetoutServers(&sys)
 	go usecases.RegisterServices(&sys)
 
-	fmt.Printf("🌡️  Temperature Monitor System Started\n")
+	fmt.Printf("Temperature Monitor System Started\n")
 	fmt.Printf("System: %s\n", sys.Name)
 	fmt.Printf("HTTP:   http://localhost:%d\n", sys.Husk.ProtoPort["http"])
-	fmt.Printf("\n📍 Endpoints:\n")
+	fmt.Printf("\nEndpoints:\n")
 	for name, asset := range sys.UAssets {
 		for subpath := range (*asset).GetServices() {
 			fmt.Printf("  GET /%s/%s/%s\n", sys.Name, name, subpath)
@@ -347,7 +347,7 @@ func main() {
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
 	<-sigChan
 
-	fmt.Println("\n\n🛑 Shutting down gracefully...")
+	fmt.Println("\n\nShutting down gracefully...")
 	cancel()
 }
 ```
@@ -365,11 +365,11 @@ go run *.go
 Output:
 
 ```
-🌡️  Temperature Monitor System Started
+Temperature Monitor System Started
 System: TempMonitor
 HTTP:   http://localhost:9090
 
-📍 Endpoints:
+Endpoints:
   GET /TempMonitor/TempSensor1/temperature
 ```
 
@@ -405,18 +405,18 @@ For production systems, you need certificates for secure communication.
 
 ```bash
 mbaigo cert generate-key
-# ✓ Generated private key: ./private_key.pem
-# ⚠️  Keep this file secure and do not share it!
+# Generated private key: ./private_key.pem
+# WARNING: Keep this file secure and do not share it!
 ```
 
 ### Create Certificate Signing Request
 
 ```bash
 mbaigo cert create-csr
-# ✓ Created CSR: ./csr.pem
+# Created CSR: ./csr.pem
 # Common Name: TempMonitor
 #
-# 💡 Submit this CSR to your Certificate Authority to obtain a signed certificate
+# Submit this CSR to your Certificate Authority to obtain a signed certificate
 ```
 
 ### Configure System with Certificates
@@ -543,11 +543,11 @@ func init() {
 
 You've learned how to:
 
-- ✅ Install the mbaigo CLI
-- ✅ Initialize a new system configuration
-- ✅ Generate and customize unit assets
-- ✅ Create a complete working system
-- ✅ Test your services
-- ✅ Manage certificates for production
+- Install the mbaigo CLI
+- Initialize a new system configuration
+- Generate and customize unit assets
+- Create a complete working system
+- Test your services
+- Manage certificates for production
 
 **Ready to build more?** Check out the [examples](../examples/) directory for more advanced use cases!

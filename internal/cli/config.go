@@ -86,7 +86,7 @@ var configValidateCmd = &cobra.Command{
 			} else {
 				printError("Configuration validation failed:")
 				for _, err := range errors {
-					fmt.Printf("  ✗ %s\n", err)
+					fmt.Printf("  - %s\n", err)
 				}
 			}
 			return fmt.Errorf("validation failed")
@@ -95,7 +95,7 @@ var configValidateCmd = &cobra.Command{
 		if JSON {
 			fmt.Println(`{"valid":true}`)
 		} else {
-			printSuccess("✓ Configuration is valid")
+			printSuccess("Configuration is valid")
 		}
 
 		return nil
@@ -103,7 +103,7 @@ var configValidateCmd = &cobra.Command{
 }
 
 func printConfigTable(config map[string]interface{}) {
-	fmt.Println("📋 System Configuration")
+	fmt.Println("System Configuration")
 	fmt.Println("=" + repeat("=", 60))
 
 	if systemName, ok := config["systemname"].(string); ok {

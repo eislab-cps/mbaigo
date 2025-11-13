@@ -7,7 +7,7 @@ Telegrapher transforms MQTT topics into services by extracting path information 
 
 ---
 
-## 💪 Compiling
+## Compiling
 
 To compile this code, ensure you have Go installed and fetch the `mbaigo` module:
 
@@ -49,7 +49,7 @@ go build -o telegrapher_imac
 
 ---
 
-## 🚀 Cross-compiling
+## Cross-compiling
 
 To build for different platforms:
 
@@ -77,7 +77,7 @@ Where:
 
 ---
 
-## 📦 Deploying the MQTT Broker (Asset)
+## Deploying the MQTT Broker (Asset)
 
 If you don't have an MQTT broker for testing, you can install the [Eclipse Mosquitto broker](https://mosquitto.org). On a Raspberry Pi or Debian-based system:
 
@@ -87,7 +87,7 @@ sudo apt install -y mosquitto mosquitto-clients
 mosquitto -v
 ```
 
-### 🔁 Basic Publish/Subscribe Test
+### Basic Publish/Subscribe Test
 
 **Publish**:
 
@@ -112,7 +112,7 @@ go run mqttGen.go
 
 ---
 
-## 🔐 Adding Some Security
+## Adding Some Security
 
 Edit the Mosquitto configuration file:
 
@@ -160,11 +160,11 @@ Excellent question — and one that matters a lot for actual deployment!
 ---
 
 
-### 📡 To Allow Subscribers from Other Computers
+### To Allow Subscribers from Other Computers
 
-Here’s what needs to be true:
+Here's what needs to be true:
 
-#### ✅ 1. **Mosquitto must be listening on an external interface**
+#### 1. **Mosquitto must be listening on an external interface**
 
 Your current config might:
 
@@ -182,7 +182,7 @@ listener 1883 0.0.0.0
 
 ---
 
-#### ✅ 2. **The device's firewall must allow port 1883**
+#### 2. **The device's firewall must allow port 1883**
 
 If you're running `ufw` (Uncomplicated Firewall) or `iptables`, make sure port 1883 is open:
 
@@ -198,7 +198,7 @@ sudo ufw status
 
 ---
 
-#### ✅ 3. **Clients must connect using the broker's IP address**
+#### 3. **Clients must connect using the broker's IP address**
 
 From another computer (on the same network), use:
 
@@ -210,7 +210,7 @@ Replace `<BROKER_IP_ADDRESS>` with the IP of the Raspberry Pi or host running Mo
 
 ---
 
-### 🛡️ Bonus: Secure Remote Access
+### Bonus: Secure Remote Access
 
 If you're exposing the broker outside your local network (e.g. over the internet), you should:
 
@@ -220,7 +220,7 @@ If you're exposing the broker outside your local network (e.g. over the internet
 
 ---
 
-### ✅ TL;DR
+### TL;DR
 
 Your current config **supports remote connections**, but only if:
 

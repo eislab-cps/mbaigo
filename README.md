@@ -20,7 +20,7 @@ sudo make install
 
 ### 2. Start Core Systems
 
-**⚠️ IMPORTANT:** Run these commands from the **mbaigo root directory**, not from examples!
+**IMPORTANT:** Run these commands from the **mbaigo root directory**, not from examples!
 
 ```bash
 # Terminal 1: Start Service Registry (from mbaigo root)
@@ -32,9 +32,11 @@ cd /path/to/mbaigo
 mbaigo core start orchestrator
 ```
 
-**Note:**
+**Notes:**
 - Use `mbaigo` if installed globally, or `./bin/mbaigo` if running from the build directory
 - Core systems must run from root to avoid config conflicts with application systems
+- **First run**: Each core system creates its config file and exits. Run the command again to start it.
+- Certificate authentication is disabled for this basic tutorial (no CA system needed)
 
 ### 3. Run Example Application
 
@@ -51,6 +53,28 @@ curl http://localhost:8080/MySystem/TempSensor1/temperature
 ```
 
 **That's it!** You now have a complete Arrowhead local cloud with service discovery.
+
+## Docker Quick Start (1 minute)
+
+Prefer Docker? Start everything with one command:
+
+```bash
+git clone https://github.com/eislab-cps/mbaigo.git
+cd mbaigo
+docker-compose up --build
+```
+
+This starts:
+- ESR on port 20102
+- Orchestrator on port 20103
+- Three-sensors example on port 8080
+
+Test it:
+```bash
+curl http://localhost:8080/MySystem/TempSensor1/temperature
+```
+
+See **[DOCKER.md](./DOCKER.md)** for complete Docker documentation.
 
 ## CLI Features
 
@@ -165,11 +189,11 @@ See [examples/three-sensors/README.md](./examples/three-sensors/README.md) for c
 
 ## What You Get with the CLI
 
-- **⚡ Instant Core Systems** - Embedded ESR and Orchestrator (no separate installation)
-- **🚀 Code Generation** - Generate asset templates and examples
-- **🔧 Project Management** - Initialize, configure, validate projects
-- **📊 System Monitoring** - View system info, list services
-- **🎯 Zero Config Start** - Default configs for immediate development
+- **Instant Core Systems** - Embedded ESR and Orchestrator (no separate installation)
+- **Code Generation** - Generate asset templates and examples
+- **Project Management** - Initialize, configure, validate projects
+- **System Monitoring** - View system info, list services
+- **Zero Config Start** - Default configs for immediate development
 
 ## Development
 
@@ -183,6 +207,9 @@ make runchecks     # Run all checks
 ## Documentation
 
 - **[Getting Started Guide](./docs/GETTING-STARTED.MD)** - Detailed tutorial
+- **[Deployment Options](./DEPLOYMENT-OPTIONS.md)** - Compare Docker vs Native deployment
+- **[Docker Deployment](./DOCKER.md)** - Complete Docker Compose guide
+- **[Testing Guide](./TESTING.md)** - Step-by-step testing instructions
 - **[Architecture](./docs/ARCHITECTURE.MD)** - System design with diagrams
 - **[CLI Reference](./docs/CLI-REFERENCE.MD)** - Complete CLI documentation
 - **[Examples](./examples/)** - Working example applications
@@ -191,6 +218,7 @@ make runchecks     # Run all checks
 ## Key Features
 
 - **Embedded Core Systems** - ESR and Orchestrator built into 10MB binary
+- **Docker Ready** - Complete Docker Compose setup with one-command deployment
 - **Service-Oriented** - Automatic registration and discovery
 - **Configuration-Driven** - JSON-based system configuration
 - **Secure** - Mutual TLS with X.509 certificates
@@ -205,7 +233,7 @@ make runchecks     # Run all checks
 
 ## Status
 
-⚠️ **Early Development** - The code is in early stages and not production ready.
+**Early Development** - The code is in early stages and not production ready.
 
 ## Use Cases
 

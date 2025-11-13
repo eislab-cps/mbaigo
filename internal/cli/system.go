@@ -32,7 +32,7 @@ var systemInfoCmd = &cobra.Command{
 			return printJSON(config)
 		}
 
-		fmt.Println("🔧 System Information")
+		fmt.Println("System Information")
 		fmt.Println("=" + repeat("=", 60))
 
 		if name, ok := config["systemname"].(string); ok {
@@ -142,7 +142,7 @@ func main() {
 
 		fmt.Println(output)
 
-		fmt.Println("\n💡 Usage:")
+		fmt.Println("\nUsage:")
 		fmt.Println("  Save this to main.go and run with: go run main.go")
 
 		return nil

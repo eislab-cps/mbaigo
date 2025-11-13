@@ -65,7 +65,7 @@ var certGenerateKeyCmd = &cobra.Command{
 		}
 
 		printSuccess(fmt.Sprintf("Generated private key: %s", keyPath))
-		fmt.Println("⚠️  Keep this file secure and do not share it!")
+		fmt.Println("WARNING: Keep this file secure and do not share it!")
 
 		return nil
 	},
@@ -135,7 +135,7 @@ var certRequestCmd = &cobra.Command{
 
 		printSuccess(fmt.Sprintf("Created CSR: %s", csrPath))
 		fmt.Printf("Common Name: %s\n", certCommonName)
-		fmt.Println("\n💡 Submit this CSR to your Certificate Authority to obtain a signed certificate")
+		fmt.Println("\nSubmit this CSR to your Certificate Authority to obtain a signed certificate")
 
 		return nil
 	},

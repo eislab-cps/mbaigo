@@ -335,7 +335,7 @@ Human-readable formatted tables with colors:
 
 ```bash
 $ mbaigo service list
-📡 Configured Services
+Configured Services
 ================================================================================
 ASSET                SERVICE              SUBPATH         REG PERIOD
 --------------------------------------------------------------------------------

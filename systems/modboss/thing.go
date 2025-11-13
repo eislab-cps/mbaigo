@@ -265,7 +265,7 @@ func (ua *UnitAsset) read() (f forms.Form) {
 		if !ok {
 			desc = "Unknown Exception"
 		}
-		log.Printf("⚠️ Modbus exception for address %s: Function 0x%X, Code 0x%X (%s)", ua.Address, response[7], exceptionCode, desc)
+		log.Printf("WARNING: Modbus exception for address %s: Function 0x%X, Code 0x%X (%s)", ua.Address, response[7], exceptionCode, desc)
 		return nil
 	}
 

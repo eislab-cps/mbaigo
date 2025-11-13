@@ -15,9 +15,10 @@ A complete service-oriented architecture example showing:
 - Traits for runtime configuration
 
 **Complexity**: Intermediate
-**Prerequisites**: Running core systems (ESR and Orchestrator)
-**Run time**: 5-10 minutes to set up
+**Prerequisites**: Docker OR running core systems (ESR and Orchestrator)
+**Run time**: 1 minute with Docker, 5-10 minutes native
 **Best for**: Learning complete SOA with service registration and discovery
+**Docker Ready**: Yes - includes complete docker-compose.yml
 
 ### [Simple](./simple/)
 The most basic example showing:
@@ -49,10 +50,37 @@ Each example directory contains:
 - `main.go` (or `*.go`) - The application code
 - `README.md` - Specific instructions and explanations
 - `systemconfig.json` - System configuration
+- `docker-compose.yml` - Docker setup (where applicable)
 
-**For full service-oriented architecture (recommended):**
+### Option 1: Docker (Recommended)
 
-⚠️ **IMPORTANT:** Core systems MUST run from **mbaigo root directory**!
+The easiest way to run examples:
+
+```bash
+cd /path/to/mbaigo/examples/<example-name>
+docker-compose up --build
+
+# Or use Makefile:
+make docker-up
+```
+
+This automatically:
+- Builds all services from source
+- Starts core systems (ESR, Orchestrator)
+- Starts the example application
+- Configures networking and dependencies
+
+**Benefits:**
+- No manual setup required
+- No port conflicts
+- Isolated environment
+- Consistent results
+
+### Option 2: Native Go
+
+**For full service-oriented architecture:**
+
+**IMPORTANT:** Core systems MUST run from **mbaigo root directory**!
 
 ```bash
 # Terminal 1: Start ESR (from mbaigo root!)

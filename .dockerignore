@@ -1,0 +1,56 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Build artifacts
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation (not needed in container)
+docs/
+paper/
+*.md
+LICENSE
+
+# Test files
+*_test.go
+test/
+tests/
+
+# CI/CD
+.github/
+
+# Docker files (don't copy into themselves)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# System config files (will be generated)
+systemconfig.json
+systems/*/systemconfig.json
+
+# Dependencies
+vendor/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Scripts (not needed in runtime)
+scripts/

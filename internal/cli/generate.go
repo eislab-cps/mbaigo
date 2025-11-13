@@ -253,7 +253,7 @@ func main() {
 		}
 
 		printSuccess(fmt.Sprintf("Generated example application: %s", filename))
-		fmt.Println("\n▶️  Run with: go run " + filename)
+		fmt.Println("\nRun with: go run " + filename)
 
 		return nil
 	},

@@ -88,7 +88,7 @@ func main() {
 	go usecases.SetoutServers(&sys)
 	go usecases.RegisterServices(&sys)
 
-	fmt.Println("\n🚀 System Started!")
+	fmt.Println("\nSystem Started!")
 	fmt.Println("=" + repeat("=", 60))
 	fmt.Printf("System Name:  %s\n", sys.Name)
 
@@ -98,7 +98,7 @@ func main() {
 	}
 
 	fmt.Printf("HTTP:         http://localhost:%d\n", sys.Husk.ProtoPort["http"])
-	fmt.Println("\n📍 Available Endpoints:")
+	fmt.Println("\nAvailable Endpoints:")
 
 	for name, asset := range sys.UAssets {
 		services := (*asset).GetServices()
@@ -108,7 +108,7 @@ func main() {
 	}
 
 	fmt.Println(repeat("=", 60))
-	fmt.Println("\n💡 Test with:")
+	fmt.Println("\nTest with:")
 	for name, asset := range sys.UAssets {
 		services := (*asset).GetServices()
 		for subpath := range services {
@@ -124,7 +124,7 @@ func main() {
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
 	<-sigChan
 
-	fmt.Println("\n\n🛑 Shutting down gracefully...")
+	fmt.Println("\n\nShutting down gracefully...")
 	cancel()
 }
 

@@ -22,4 +22,4 @@ echo "===================="
 gocyclo -avg -top 10 .
 
 echo ""
-echo "✓ HTML coverage report: cover.html"
+echo "HTML coverage report: cover.html"

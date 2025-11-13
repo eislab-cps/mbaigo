@@ -100,7 +100,7 @@ func runInit() error {
 
 func runInteractiveInit() error {
 	// Interactive prompts for configuration
-	fmt.Println("🚀 Interactive System Initialization")
+	fmt.Println("Interactive System Initialization")
 	fmt.Println()
 
 	// Prompt for system name

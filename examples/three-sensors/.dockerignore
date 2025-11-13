@@ -1,0 +1,27 @@
+# Docker ignore file for three-sensors example
+
+# System config (will be generated)
+systemconfig.json
+
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+README.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Test files
+*_test.go
+
+# Temporary files
+*.tmp
+tmp/
+temp/

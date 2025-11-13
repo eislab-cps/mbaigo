@@ -25,19 +25,19 @@ func colorize(color, text string) string {
 }
 
 func printSuccess(msg string) {
-	fmt.Println(colorize(colorGreen, "✓ " + msg))
+	fmt.Println(colorize(colorGreen, msg))
 }
 
 func printError(msg string) {
-	fmt.Println(colorize(colorRed, "✗ " + msg))
+	fmt.Println(colorize(colorRed, "ERROR: " + msg))
 }
 
 func printWarning(msg string) {
-	fmt.Println(colorize(colorYellow, "⚠ " + msg))
+	fmt.Println(colorize(colorYellow, "WARNING: " + msg))
 }
 
 func printInfo(msg string) {
-	fmt.Println(colorize(colorCyan, "ℹ " + msg))
+	fmt.Println(colorize(colorCyan, "INFO: " + msg))
 }
 
 func repeat(s string, count int) string {

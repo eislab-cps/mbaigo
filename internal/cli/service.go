@@ -65,7 +65,7 @@ var serviceListCmd = &cobra.Command{
 			return printJSON(map[string]interface{}{"services": services})
 		}
 
-		fmt.Println("📡 Configured Services")
+		fmt.Println("Configured Services")
 		fmt.Println("=" + repeat("=", 80))
 		fmt.Printf("%-20s %-20s %-15s %-10s\n", "ASSET", "SERVICE", "SUBPATH", "REG PERIOD")
 		fmt.Println(repeat("-", 80))
@@ -162,7 +162,7 @@ var serviceAddCmd = &cobra.Command{
 		}
 
 		printSuccess(fmt.Sprintf("Added service '%s' to asset '%s'", serviceName, serviceAssetName))
-		fmt.Println("\n💡 Next: Edit the service details in systemconfig.json")
+		fmt.Println("\nNext: Edit the service details in systemconfig.json")
 
 		return nil
 	},

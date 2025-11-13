@@ -16,7 +16,7 @@ This example demonstrates a complete service-oriented architecture with automati
 
 ## Quick Start
 
-**⚠️ CRITICAL SETUP:**
+**CRITICAL SETUP:**
 
 ```bash
 # Terminal 1: ESR (MUST run from mbaigo root!)
@@ -33,6 +33,82 @@ go run *.go
 ```
 
 **Why?** Core systems must run from root to avoid picking up application configs!
+
+**Notes:**
+- **First run**: ESR and Orchestrator create config files and exit. Run each command again to start them.
+- Certificate authentication is disabled for this tutorial (no CA system needed)
+- Service registration works automatically once core systems are running
+
+## Docker Quick Start (Recommended)
+
+Prefer Docker? Start everything with one command:
+
+```bash
+cd /path/to/mbaigo/examples/three-sensors
+docker-compose up --build
+
+# Or use the Makefile:
+make docker-up
+```
+
+This automatically:
+- Builds all services from source (no pre-built images)
+- Starts ESR on port 20102
+- Starts Orchestrator on port 20103
+- Starts three-sensors application on port 8080
+- Configures networking and health checks
+- Handles startup order with dependencies
+
+**Test the deployment:**
+
+```bash
+# Check ESR status
+curl http://localhost:20102/serviceregistrar/registry/status
+
+# View all registered services
+curl http://localhost:20102/serviceregistrar/registry/query
+
+# Test temperature sensor
+curl http://localhost:8080/MySystem/TempSensor1/temperature
+
+# Test pressure sensor
+curl http://localhost:8080/MySystem/PressureSensor1/pressure
+
+# Test controller
+curl http://localhost:8080/MySystem/Controller1/control
+```
+
+**View logs:**
+```bash
+docker-compose logs -f
+```
+
+**Stop everything:**
+```bash
+docker-compose down
+```
+
+**Clean slate (remove volumes):**
+```bash
+docker-compose down -v
+```
+
+### Docker Architecture
+
+All services run in an isolated network:
+- ESR container: `three-sensors-esr`
+- Orchestrator container: `three-sensors-orchestrator`
+- Application container: `three-sensors-app`
+- Network: `three-sensors-network`
+- Volumes: `esr-data`, `orchestrator-data`, `app-data`
+
+Services communicate internally using container names (e.g., `http://esr:20102`) and are accessible from the host via port mapping.
+
+**See [DOCKER-README.md](./DOCKER-README.md) for complete Docker documentation including:**
+- Detailed container information
+- Troubleshooting guide
+- Production deployment tips
+- Development workflow
 
 ### Architecture Overview
 
@@ -80,7 +156,7 @@ graph TB
 
 ### Step 1: Start Core Systems
 
-⚠️ **CRITICAL:** Run core systems from **mbaigo root directory**, NOT from examples/three-sensors!
+**CRITICAL:** Run core systems from **mbaigo root directory**, NOT from examples/three-sensors!
 
 The mbaigo CLI includes embedded core systems. Start these FIRST before running application systems.
 
@@ -485,6 +561,26 @@ graph TD
 4. **Services** - HTTP endpoints exposed by assets
 5. **Forms** - Standardized data exchange formats (SignalA_v1a, SignalB_v1a)
 
+## Makefile Commands
+
+Convenience commands for easy operation:
+
+```bash
+# Docker operations (recommended)
+make docker-up       # Start all services with Docker
+make docker-down     # Stop all services
+make docker-logs     # View logs from all containers
+make docker-restart  # Restart services
+make docker-clean    # Stop and remove volumes
+
+# Native Go (requires core systems running separately)
+make run            # Run application with go run
+make test           # Test all service endpoints
+
+# Help
+make help           # Show all available commands
+```
+
 ## CLI Reference
 
 ```bash
@@ -506,11 +602,11 @@ sudo make install
 ```
 
 **Benefits of embedded core systems:**
-- ✅ Single binary deployment (10MB)
-- ✅ No runtime compilation
-- ✅ Instant startup
-- ✅ No separate go.mod management
-- ✅ Consistent versions
+- Single binary deployment (10MB)
+- No runtime compilation
+- Instant startup
+- No separate go.mod management
+- Consistent versions
 
 ## Next Steps
 

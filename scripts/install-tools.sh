@@ -15,7 +15,7 @@ echo ""
 # Check if tools are already installed
 check_tool() {
     if command -v "$1" &> /dev/null; then
-        echo "  ✓ $1 already installed"
+        echo "  $1 already installed"
         return 0
     else
         return 1
@@ -47,7 +47,7 @@ if ! check_tool govulncheck; then
 fi
 
 echo ""
-echo "✓ Optional tools installed!"
+echo "Optional tools installed!"
 echo ""
 echo "Additional optional tools:"
 echo "  - typos (spell checker): cargo install typos-cli"
