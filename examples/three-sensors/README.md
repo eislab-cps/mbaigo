@@ -1,66 +1,22 @@
 # Three Sensors Example
 
-This example demonstrates a complete mbaigo system with three different asset types:
+This example demonstrates a complete service-oriented architecture with automatic service registration, discovery, and consumption.
 
-- **Temperature Sensor** - Simulated analog sensor reading temperature in Celsius
-- **Pressure Sensor** - Simulated analog sensor reading pressure in bar
-- **Controller** - Digital controller providing boolean status
+**What you'll build:**
+- **Temperature Sensor** - Provider that registers a temperature service
+- **Pressure Sensor** - Provider that registers a pressure service
+- **Controller** - Consumer that discovers and calls both services
+
+**Architecture:** 5 separate processes demonstrating the Arrowhead Framework:
+1. ESR (Service Registry)
+2. Orchestrator (Service Discovery)
+3. Temperature Provider
+4. Pressure Provider
+5. Controller (Consumer)
 
 ## Quick Start
 
-### Single Process (All Assets Together)
-
-Run all three assets in one process:
-
-```bash
-cd examples/three-sensors
-go run *.go
-```
-
-**Expected Output:**
-
-```
-🚀 System Started!
-=============================================================
-System Name:  MySystem
-Local Cloud:  LocalCloud
-HTTP:         http://localhost:8080
-
-📍 Available Endpoints:
-  GET /MySystem/TempSensor1/temperature
-  GET /MySystem/PressureSensor1/pressure
-  GET /MySystem/Controller1/control
-=============================================================
-
-💡 Test with:
-  curl http://localhost:8080/MySystem/TempSensor1/temperature
-  curl http://localhost:8080/MySystem/PressureSensor1/pressure
-  curl http://localhost:8080/MySystem/Controller1/control
-
-Press Ctrl+C to stop...
-```
-
-**Test the services:**
-
-```bash
-# Temperature sensor
-curl http://localhost:8080/MySystem/TempSensor1/temperature
-# Response: {"value":25,"unit":"celsius","timestamp":"2025-11-11T23:35:58+01:00","version":"SignalA_v1.0"}
-
-# Pressure sensor
-curl http://localhost:8080/MySystem/PressureSensor1/pressure
-# Response: {"value":1.025,"unit":"bar","timestamp":"2025-11-11T23:36:02+01:00","version":"SignalA_v1.0"}
-
-# Controller
-curl http://localhost:8080/MySystem/Controller1/control
-# Response: {"value":true,"timestamp":"2025-11-11T23:36:02+01:00","version":"SignalB_v1.0"}
-```
-
----
-
-## Multi-Process Setup (Service-Oriented Architecture)
-
-Run a complete Arrowhead Framework with **5 separate processes** demonstrating service registration, discovery, and consumption.
+**⚠️ IMPORTANT:** Start core systems FIRST, then application systems.
 
 ### Architecture Overview
 
@@ -103,12 +59,12 @@ graph TB
 ### Prerequisites
 
 - Go 1.24.4 or later
-- Clone this repository and be in the root directory
-- Build the mbaigo CLI: `make build`
+- Clone this repository
+- Build the mbaigo CLI: `cd mbaigo && make build`
 
 ### Step 1: Start Core Systems
 
-The mbaigo CLI includes **embedded core systems** (ESR and Orchestrator) for instant startup.
+The mbaigo CLI includes embedded core systems. Start these FIRST before running application systems.
 
 **Terminal 1 - Start ESR (Service Registry):**
 
@@ -142,59 +98,49 @@ curl http://localhost:20102/serviceregistrar/registry/status
 
 ### Step 2: Start Application Systems
 
-Now start the three application systems that will register and discover each other.
+Now start the application systems that will register with and discover each other through the core systems.
 
-**Terminal 3 - Temperature Provider:**
+**Terminal 3 - Start All Application Systems:**
 
-```bash
-cd examples/three-sensors
-go run main.go temperaturesensor_asset.go
-```
-
-- Starts HTTP server on port 8080
-- Registers temperature service with ESR
-- Provides temperature readings
-
-**Terminal 4 - Pressure Provider:**
+For this example, run all three assets together in one process:
 
 ```bash
 cd examples/three-sensors
-go run main.go pressuresensor_asset.go
+go run *.go
 ```
 
-**Note:** You'll need to modify the system to use port 8081 to avoid conflicts.
+This starts:
+- Temperature Provider (registers temperature service)
+- Pressure Provider (registers pressure service)
+- Controller (discovers and consumes both services)
 
-**Terminal 5 - Controller (Consumer):**
+All services register with ESR and can be discovered through the Orchestrator.
 
-```bash
-cd examples/three-sensors
-go run main.go controller_asset.go
-```
-
-- Queries orchestrator for temperature service
-- Queries orchestrator for pressure service
-- Consumes data from both providers
-
-### Verify the Setup
+### Step 3: Verify the Setup
 
 **Check Service Registry:**
 
-Open in browser: `http://localhost:20102/serviceregistrar/registry/query`
+Open in browser or use curl: `http://localhost:20102/serviceregistrar/registry/query`
 
 You should see all registered services with:
 - Service ID, definition, system name
 - IP addresses and ports
-- Expiration times
+- Expiration times (TTL)
 
-**Test Individual Services:**
+**Test Services:**
 
 ```bash
 # Temperature
-curl http://localhost:8080/MySystem/TemperatureSensor1/temperature
+curl http://localhost:8080/MySystem/TempSensor1/temperature
 
 # Pressure
-curl http://localhost:8081/MySystem/PressureSensor1/pressure
+curl http://localhost:8080/MySystem/PressureSensor1/pressure
+
+# Controller
+curl http://localhost:8080/MySystem/Controller1/control
 ```
+
+All running from port 8080 since they're in the same process.
 
 ### Service Flow
 
@@ -259,16 +205,16 @@ sequenceDiagram
 ### Stopping All Processes
 
 Press `Ctrl+C` in each terminal (reverse order recommended):
-1. Controller (Terminal 5)
-2. Pressure Provider (Terminal 4)
-3. Temperature Provider (Terminal 3)
-4. Orchestrator (Terminal 2)
-5. ESR (Terminal 1)
+1. Application systems (Terminal 3)
+2. Orchestrator (Terminal 2)
+3. ESR (Terminal 1)
 
 Systems gracefully shutdown:
 - Unregister services from ESR
 - Close HTTP servers
 - Clean up resources
+
+**Note:** You can also run the three application assets as separate processes by creating individual main files for each. This example runs them together for simplicity.
 
 ### Common Issues
 
@@ -538,28 +484,17 @@ mbaigo core start esr
 ## Next Steps
 
 1. **Modify simulations** - Change random value generation
-2. **Add new services** - Extend assets with endpoints
-3. **Create new assets** - Additional sensor types
-4. **Integrate hardware** - Replace simulations with real I/O
+2. **Add new services** - Extend assets with additional endpoints
+3. **Create new assets** - Additional sensor types (humidity, light, etc.)
+4. **Integrate hardware** - Replace simulations with real I/O (GPIO, I2C, etc.)
 5. **Add persistence** - Store readings in database
-6. **Add MQTT** - Publish readings to broker
-7. **Use HTTPS** - Enable mutual TLS authentication
-
-### Create Separate Provider Applications
-
-For true multi-process architecture, create dedicated applications:
-
-```bash
-examples/temperature-provider/
-examples/pressure-provider/
-examples/controller-consumer/
-```
-
-Each with:
-- Own `main.go`
-- Own `systemconfig.json`
-- Unique system name
-- Unique port
+6. **Use HTTPS** - Enable mutual TLS authentication
+7. **Separate processes** - Create dedicated applications for each provider:
+   ```
+   examples/temperature-provider/    # Own main.go, config, port
+   examples/pressure-provider/       # Own main.go, config, port
+   examples/controller-consumer/     # Own main.go, config, port
+   ```
 
 ## Learn More
 

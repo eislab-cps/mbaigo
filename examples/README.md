@@ -5,18 +5,19 @@ This directory contains example applications demonstrating how to use the mbaigo
 ## Available Examples
 
 ### [Three Sensors](./three-sensors/)
-A practical multi-asset example showing:
-- Temperature sensor with configurable min/max range
-- Pressure sensor with simulated readings
-- Controller with boolean status
+A complete service-oriented architecture example showing:
+- Temperature and pressure providers registering services
+- Controller discovering and consuming services
+- Service registration with ESR (Service Registry)
+- Service discovery via Orchestrator
 - Asset factory pattern for dynamic instantiation
 - Configuration-driven asset creation
 - Traits for runtime configuration
 
-**Complexity**: Beginner
-**Prerequisites**: None (works standalone)
-**Run time**: < 5 minutes to understand
-**Best for**: Learning asset implementation and configuration
+**Complexity**: Intermediate
+**Prerequisites**: Running core systems (ESR and Orchestrator)
+**Run time**: 5-10 minutes to set up
+**Best for**: Learning complete SOA with service registration and discovery
 
 ### [Simple](./simple/)
 The most basic example showing:
@@ -45,23 +46,36 @@ A complete service-oriented example showing:
 ## Running Examples
 
 Each example directory contains:
-- `main.go` - The application code
+- `main.go` (or `*.go`) - The application code
 - `README.md` - Specific instructions and explanations
-- `systemconfig.json` - Generated configuration (after first run)
+- `systemconfig.json` - System configuration
 
-To run any example:
+**For full service-oriented architecture (recommended):**
 
 ```bash
+# Terminal 1: Start ESR
+./bin/mbaigo core start esr
+
+# Terminal 2: Start Orchestrator
+./bin/mbaigo core start orchestrator
+
+# Terminal 3: Start example
 cd examples/<example-name>
-go run main.go
+go run *.go
 ```
+
+**Note:** Some examples may work standalone without core systems, but you'll miss the service registration and discovery features. Check each example's README for details.
 
 ## Learning Path
 
-1. Start with **simple** to understand basic concepts
-2. Explore **three-sensors** to learn asset configuration and factory pattern
-3. Move to **consumer-provider** to see service interaction
-4. Check the [documentation](../docs/) and [GETTING-STARTED.md](../GETTING-STARTED.md) for detailed guides
+**Recommended order:**
+
+1. **Start with three-sensors** - The main example demonstrating complete service-oriented architecture with registration, discovery, and consumption
+2. **Explore simple** (if available) - Understand basic system concepts without SOA complexity
+3. **Try consumer-provider** (if available) - Advanced service interaction patterns
+4. **Read the docs** - Check [documentation](../docs/) and [GETTING-STARTED.MD](../docs/GETTING-STARTED.MD) for detailed guides
+
+**Quick start:** Jump straight to `three-sensors` - it has everything you need to understand mbaigo!
 
 ## Creating Your Own System
 

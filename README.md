@@ -68,22 +68,26 @@ The `mbaigo` CLI provides everything you need:
 ## Create Your Own System
 
 ```bash
-# 1. Create project directory
+# 1. Start core systems (in separate terminals)
+./bin/mbaigo core start esr
+./bin/mbaigo core start orchestrator
+
+# 2. Create project directory
 mkdir my-sensor-system && cd my-sensor-system
 
-# 2. Initialize with CLI
+# 3. Initialize with CLI
 ~/mbaigo/bin/mbaigo init --name MySensorSystem --cloud Factory
 
-# 3. Generate asset
+# 4. Generate asset
 ~/mbaigo/bin/mbaigo generate asset --name TemperatureSensor
 
-# 4. Setup and run
+# 5. Setup and run
 go mod init my-sensor-system
 go mod tidy
 go run *.go
 ```
 
-Your system will start with auto-generated endpoints!
+Your system will register with ESR and be discoverable through the Orchestrator!
 
 ## Core Concepts
 
@@ -120,21 +124,25 @@ mbaigo/
 
 ### Three Sensors Example
 
-Complete multi-process service-oriented architecture:
+Complete service-oriented architecture demonstrating service registration, discovery, and consumption:
+
+**Prerequisites:** Start core systems first (ESR and Orchestrator)
 
 ```bash
-cd examples/three-sensors
-go run *.go  # Single process
+# Terminal 1: Start Service Registry
+./bin/mbaigo core start esr
 
-# Or run as 5 separate processes:
-# Terminal 1: ./bin/mbaigo core start esr
-# Terminal 2: ./bin/mbaigo core start orchestrator
-# Terminal 3: go run main.go temperaturesensor_asset.go
-# Terminal 4: go run main.go pressuresensor_asset.go
-# Terminal 5: go run main.go controller_asset.go
+# Terminal 2: Start Orchestrator
+./bin/mbaigo core start orchestrator
+
+# Terminal 3: Start application systems
+cd examples/three-sensors
+go run *.go
 ```
 
-See [examples/three-sensors/README.md](./examples/three-sensors/README.md) for details.
+The application will register services with ESR and discover them through the Orchestrator.
+
+See [examples/three-sensors/README.md](./examples/three-sensors/README.md) for complete details.
 
 ## What You Get with the CLI
 

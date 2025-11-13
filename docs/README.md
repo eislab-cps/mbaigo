@@ -47,6 +47,6 @@ See [pkg.go.dev](https://pkg.go.dev/github.com/sdoque/mbaigo/pkg) for API refere
 ## Examples
 
 Working example applications in [/examples](../examples/):
-- **three-sensors** - Complete multi-process SOA system
+- **three-sensors** - Complete service-oriented architecture with ESR, Orchestrator, and application systems
 
-Each example has its own README with setup instructions.
+Each example has its own README with step-by-step setup instructions.
