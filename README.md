@@ -20,15 +20,21 @@ sudo make install
 
 ### 2. Start Core Systems
 
+**⚠️ IMPORTANT:** Run these commands from the **mbaigo root directory**, not from examples!
+
 ```bash
-# Terminal 1: Start Service Registry
+# Terminal 1: Start Service Registry (from mbaigo root)
+cd /path/to/mbaigo
 mbaigo core start esr
 
-# Terminal 2: Start Orchestrator
+# Terminal 2: Start Orchestrator (from mbaigo root)
+cd /path/to/mbaigo
 mbaigo core start orchestrator
 ```
 
-**Note:** Use `mbaigo` if installed globally, or `./bin/mbaigo` if running from the build directory.
+**Note:**
+- Use `mbaigo` if installed globally, or `./bin/mbaigo` if running from the build directory
+- Core systems must run from root to avoid config conflicts with application systems
 
 ### 3. Run Example Application
 
@@ -74,11 +80,14 @@ mbaigo service add              # Add service to asset
 ## Create Your Own System
 
 ```bash
-# 1. Start core systems (in separate terminals)
-mbaigo core start esr
-mbaigo core start orchestrator
+# 1. Start core systems (in separate terminals, from mbaigo root)
+cd /path/to/mbaigo
+mbaigo core start esr         # Terminal 1
 
-# 2. Create project directory
+cd /path/to/mbaigo
+mbaigo core start orchestrator # Terminal 2
+
+# 2. Create project directory (in Terminal 3)
 mkdir my-sensor-system && cd my-sensor-system
 
 # 3. Initialize with CLI
@@ -132,21 +141,25 @@ mbaigo/
 
 Complete service-oriented architecture demonstrating service registration, discovery, and consumption:
 
-**Prerequisites:** Start core systems first (ESR and Orchestrator)
+**Prerequisites:** Start core systems first (ESR and Orchestrator) **from mbaigo root directory**
 
 ```bash
-# Terminal 1: Start Service Registry
+# Terminal 1: Start Service Registry (from mbaigo root!)
+cd /path/to/mbaigo
 mbaigo core start esr
 
-# Terminal 2: Start Orchestrator
+# Terminal 2: Start Orchestrator (from mbaigo root!)
+cd /path/to/mbaigo
 mbaigo core start orchestrator
 
 # Terminal 3: Start application systems
-cd examples/three-sensors
+cd /path/to/mbaigo/examples/three-sensors
 go run *.go
 ```
 
 The application will register services with ESR and discover them through the Orchestrator.
+
+**Important:** Core systems must run from mbaigo root, not from examples directory!
 
 See [examples/three-sensors/README.md](./examples/three-sensors/README.md) for complete details.
 

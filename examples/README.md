@@ -52,19 +52,26 @@ Each example directory contains:
 
 **For full service-oriented architecture (recommended):**
 
+⚠️ **IMPORTANT:** Core systems MUST run from **mbaigo root directory**!
+
 ```bash
-# Terminal 1: Start ESR
+# Terminal 1: Start ESR (from mbaigo root!)
+cd /path/to/mbaigo
 mbaigo core start esr
 
-# Terminal 2: Start Orchestrator
+# Terminal 2: Start Orchestrator (from mbaigo root!)
+cd /path/to/mbaigo
 mbaigo core start orchestrator
 
-# Terminal 3: Start example
-cd examples/<example-name>
+# Terminal 3: Start example (from example directory)
+cd /path/to/mbaigo/examples/<example-name>
 go run *.go
 ```
 
-**Note:** Use `mbaigo` if installed globally (`sudo make install`), or `./bin/mbaigo` if running from build directory. Some examples may work standalone without core systems, but you'll miss the service registration and discovery features. Check each example's README for details.
+**Notes:**
+- Use `mbaigo` if installed globally (`sudo make install`), or `./bin/mbaigo` if running from build directory
+- **Core systems from root, applications from their own directories** - this prevents config conflicts
+- Some examples may work standalone without core systems, but you'll miss the service registration and discovery features
 
 ## Learning Path
 

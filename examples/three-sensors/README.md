@@ -16,7 +16,23 @@ This example demonstrates a complete service-oriented architecture with automati
 
 ## Quick Start
 
-**⚠️ IMPORTANT:** Start core systems FIRST, then application systems.
+**⚠️ CRITICAL SETUP:**
+
+```bash
+# Terminal 1: ESR (MUST run from mbaigo root!)
+cd /path/to/mbaigo
+mbaigo core start esr
+
+# Terminal 2: Orchestrator (MUST run from mbaigo root!)
+cd /path/to/mbaigo
+mbaigo core start orchestrator
+
+# Terminal 3: Application (run from examples directory)
+cd /path/to/mbaigo/examples/three-sensors
+go run *.go
+```
+
+**Why?** Core systems must run from root to avoid picking up application configs!
 
 ### Architecture Overview
 
@@ -64,15 +80,20 @@ graph TB
 
 ### Step 1: Start Core Systems
 
+⚠️ **CRITICAL:** Run core systems from **mbaigo root directory**, NOT from examples/three-sensors!
+
 The mbaigo CLI includes embedded core systems. Start these FIRST before running application systems.
 
 **Terminal 1 - Start ESR (Service Registry):**
 
 ```bash
-# From mbaigo root directory
+# MUST be run from mbaigo root directory!
+cd /path/to/mbaigo
 mbaigo core start esr
 # Or use: ./bin/mbaigo core start esr (if not installed globally)
 ```
+
+**Why from root?** Running from examples directory will cause config conflicts!
 
 - **Starts immediately** (no compilation needed!)
 - First run: Creates `systemconfig.json` in `systems/esr/` and exits
@@ -88,7 +109,8 @@ curl http://localhost:20102/serviceregistrar/registry/status
 **Terminal 2 - Start Orchestrator:**
 
 ```bash
-# From mbaigo root directory
+# MUST be run from mbaigo root directory!
+cd /path/to/mbaigo
 mbaigo core start orchestrator
 # Or use: ./bin/mbaigo core start orchestrator (if not installed globally)
 ```
@@ -107,7 +129,8 @@ Now start the application systems that will register with and discover each othe
 For this example, run all three assets together in one process:
 
 ```bash
-cd examples/three-sensors
+# Run from the three-sensors directory
+cd /path/to/mbaigo/examples/three-sensors
 go run *.go
 ```
 
@@ -117,6 +140,11 @@ This starts:
 - Controller (discovers and consumes both services)
 
 All services register with ESR and can be discovered through the Orchestrator.
+
+**Summary of terminal setup:**
+- **Terminal 1:** ESR (from mbaigo root)
+- **Terminal 2:** Orchestrator (from mbaigo root)
+- **Terminal 3:** Application (from examples/three-sensors)
 
 ### Step 3: Verify the Setup
 
