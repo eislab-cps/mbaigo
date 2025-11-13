@@ -30,10 +30,9 @@ WORKDIR /app
 # Copy the built application
 COPY --from=builder /build/examples/simple/app .
 
-# Copy the systemconfig.json from the examples directory
-COPY examples/simple/systemconfig.json /app/systemconfig.json
+# No systemconfig.json needed - app runs standalone
 
-# Expose the HTTP port (from systemconfig.json)
+# Expose the HTTP port
 EXPOSE 8080
 
 # Run the application

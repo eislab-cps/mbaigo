@@ -5,7 +5,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"math/rand"
 	"net/http"
 	"os"
@@ -83,7 +82,7 @@ func main() {
 	service := &components.Service{
 		Definition:  "RandomNumber",
 		SubPath:     "random",
-		RegPeriod:   60,
+		// RegPeriod omitted - standalone mode (no service registration)
 		Description: "returns a random float64 number",
 		Details:     map[string][]string{"type": {"float64"}},
 	}
@@ -99,14 +98,11 @@ func main() {
 	asset := components.UnitAsset(randomizer)
 	sys.UAssets[randomizer.GetName()] = &asset
 
-	// Load or create configuration
-	if _, err := usecases.Configure(&sys); err != nil {
-		log.Printf("Configuration warning: %v", err)
-	}
+	// Skip Configure() in standalone mode - no config file needed
+	// Configure() would attempt to connect to core systems
 
-	// Start services
+	// Start HTTP server (no service registration - standalone mode)
 	go usecases.SetoutServers(&sys)
-	go usecases.RegisterServices(&sys)
 
 	fmt.Println("Randomizer system started on port 8080")
 	fmt.Printf("Try: curl http://localhost:8080/%s/%s/%s\n",

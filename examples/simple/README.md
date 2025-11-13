@@ -5,7 +5,8 @@ This example demonstrates the most basic Arrowhead system using mbaigo:
 - Creates a system with a single unit asset
 - Provides a simple HTTP service that returns random numbers
 - Shows the essential UnitAsset interface implementation
-- No core systems required (standalone application)
+- **Standalone application - no core systems required or used**
+- Perfect for learning the basics without ESR/Orchestrator complexity
 
 ## Quick Start
 
@@ -69,9 +70,11 @@ The `systemconfig.json` defines:
 1. **System Creation**: Initialize an Arrowhead system with context
 2. **Husk Configuration**: Set up middleware with protocol/port bindings
 3. **UnitAsset Implementation**: Create a custom asset implementing the interface
-4. **Service Definition**: Define and register services
+4. **Service Definition**: Define services without registration (standalone mode)
 5. **HTTP Serving**: Handle incoming service requests
 6. **Graceful Shutdown**: Clean shutdown on SIGINT/SIGTERM
+
+**Note**: This example runs in standalone mode without core systems (ESR/Orchestrator). You may see log messages about "failed to find lead registrar" - these are harmless and can be ignored. The service works perfectly without registration. See the `three-sensors` example for full service registration and discovery.
 
 ## Files
 
