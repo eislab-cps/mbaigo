@@ -21,6 +21,7 @@ import (
 	"log"
 	"mime"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/sdoque/mbaigo/pkg/components"
@@ -59,8 +60,13 @@ func Start(ctx context.Context) error {
 	assetName := assetTemplate.GetName()
 	sys.UAssets[assetName] = &assetTemplate
 
-	// Configure the system
-	rawResources, err := usecases.Configure(&sys)
+	// Configure the system - use dedicated config directory for core systems
+	configPath := "systems/orchestrator/systemconfig.json"
+	// Ensure directory exists
+	if err := os.MkdirAll("systems/orchestrator", 0755); err != nil {
+		log.Fatalf("Failed to create config directory: %v\n", err)
+	}
+	rawResources, err := usecases.ConfigureWithPath(&sys, configPath)
 	if err != nil {
 		log.Fatalf("Configuration error: %v\n", err)
 	}

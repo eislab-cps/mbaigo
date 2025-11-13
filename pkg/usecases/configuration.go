@@ -129,13 +129,19 @@ func setupDefaultConfig(sys *components.System) (defaultConfig templateOut, err 
 // Configure reads the system configuration JSON file to get the deployment details.
 // If the file is missing, it generates a default systemconfig.json file and shuts down the system
 func Configure(sys *components.System) ([]json.RawMessage, error) {
+	return ConfigureWithPath(sys, "systemconfig.json")
+}
+
+// ConfigureWithPath reads the system configuration JSON file from a specific path.
+// This allows core systems to use configs from dedicated directories.
+func ConfigureWithPath(sys *components.System, configPath string) ([]json.RawMessage, error) {
 	defaultConfig, err := setupDefaultConfig(sys)
 	if err != nil {
 		return nil, fmt.Errorf("couldn't create default config: %v", err)
 	}
 
 	// 0600 allows user Read/Write permission (secure config file), but no R/W for groups and others, 0644 to allow R/W on sudo and only R on groups/others, 0666 for R/W permissions for everyone
-	systemConfigFile, err := os.OpenFile("systemconfig.json", os.O_RDWR|os.O_CREATE, 0600)
+	systemConfigFile, err := os.OpenFile(configPath, os.O_RDWR|os.O_CREATE, 0600)
 	if err != nil {
 		return nil, fmt.Errorf("error while opening/creating systemconfig file: %v", err)
 	}
