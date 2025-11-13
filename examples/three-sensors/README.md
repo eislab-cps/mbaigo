@@ -70,7 +70,8 @@ The mbaigo CLI includes embedded core systems. Start these FIRST before running 
 
 ```bash
 # From mbaigo root directory
-./bin/mbaigo core start esr
+mbaigo core start esr
+# Or use: ./bin/mbaigo core start esr (if not installed globally)
 ```
 
 - **Starts immediately** (no compilation needed!)
@@ -88,7 +89,8 @@ curl http://localhost:20102/serviceregistrar/registry/status
 
 ```bash
 # From mbaigo root directory
-./bin/mbaigo core start orchestrator
+mbaigo core start orchestrator
+# Or use: ./bin/mbaigo core start orchestrator (if not installed globally)
 ```
 
 - **Starts immediately** (embedded!)
@@ -459,19 +461,20 @@ graph TD
 
 ```bash
 # List core systems (embedded ones marked [EMBEDDED])
-./bin/mbaigo core list
+mbaigo core list
 
 # Start embedded core systems
-./bin/mbaigo core start esr
-./bin/mbaigo core start orchestrator
-
-# Build and install CLI globally
-make build
-go install ./cmd/mbaigo
-
-# Then use anywhere
-mbaigo core list
 mbaigo core start esr
+mbaigo core start orchestrator
+```
+
+**Install mbaigo globally:**
+
+```bash
+cd /path/to/mbaigo
+make build
+sudo make install
+# Now you can use 'mbaigo' from anywhere!
 ```
 
 **Benefits of embedded core systems:**

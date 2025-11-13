@@ -54,17 +54,17 @@ Each example directory contains:
 
 ```bash
 # Terminal 1: Start ESR
-./bin/mbaigo core start esr
+mbaigo core start esr
 
 # Terminal 2: Start Orchestrator
-./bin/mbaigo core start orchestrator
+mbaigo core start orchestrator
 
 # Terminal 3: Start example
 cd examples/<example-name>
 go run *.go
 ```
 
-**Note:** Some examples may work standalone without core systems, but you'll miss the service registration and discovery features. Check each example's README for details.
+**Note:** Use `mbaigo` if installed globally (`sudo make install`), or `./bin/mbaigo` if running from build directory. Some examples may work standalone without core systems, but you'll miss the service registration and discovery features. Check each example's README for details.
 
 ## Learning Path
 

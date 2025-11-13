@@ -1,7 +1,7 @@
 # Makefile for mbaigo
 # Uses scripts in /scripts directory following Go standard project layout
 
-.PHONY: help build test lint spellcheck runchecks analyse vendor tools clean
+.PHONY: help build install test lint spellcheck runchecks analyse vendor tools clean
 
 # Default target
 help:
@@ -9,6 +9,7 @@ help:
 	@echo ""
 	@echo "Development:"
 	@echo "  make build         - Build all packages and CLI"
+	@echo "  make install       - Install mbaigo CLI to /usr/local/bin (requires sudo)"
 	@echo "  make test          - Run tests with coverage"
 	@echo "  make lint          - Run linters and static analysis"
 	@echo "  make spellcheck    - Run spell checker"
@@ -41,6 +42,20 @@ build:
 	@mkdir -p bin
 	@go build -o bin/mbaigo ./cmd/mbaigo
 	@echo "✓ Build complete: bin/mbaigo"
+
+# Install CLI to /usr/local/bin
+install:
+	@if [ ! -f bin/mbaigo ]; then \
+		echo "Error: bin/mbaigo not found. Run 'make build' first."; \
+		exit 1; \
+	fi
+	@echo "Installing mbaigo to /usr/local/bin..."
+	@cp bin/mbaigo /usr/local/bin/
+	@echo "✓ Installed: /usr/local/bin/mbaigo"
+	@echo ""
+	@echo "You can now use 'mbaigo' from anywhere:"
+	@echo "  mbaigo --help"
+	@echo "  mbaigo core start esr"
 
 # Run tests and log the test coverage
 test:

@@ -12,17 +12,23 @@ mbaigo is a Go library for building service-oriented IoT and cyber-physical syst
 git clone https://github.com/eislab-cps/mbaigo.git
 cd mbaigo
 make build
+
+# Optional: Install globally
+sudo make install
+# Now you can use 'mbaigo' from anywhere instead of './bin/mbaigo'
 ```
 
 ### 2. Start Core Systems
 
 ```bash
 # Terminal 1: Start Service Registry
-./bin/mbaigo core start esr
+mbaigo core start esr
 
 # Terminal 2: Start Orchestrator
-./bin/mbaigo core start orchestrator
+mbaigo core start orchestrator
 ```
+
+**Note:** Use `mbaigo` if installed globally, or `./bin/mbaigo` if running from the build directory.
 
 ### 3. Run Example Application
 
@@ -46,40 +52,40 @@ The `mbaigo` CLI provides everything you need:
 
 ```bash
 # Core Systems Management
-./bin/mbaigo core start esr           # Start Service Registry
-./bin/mbaigo core start orchestrator  # Start Orchestrator
-./bin/mbaigo core list                # List available core systems
+mbaigo core start esr           # Start Service Registry
+mbaigo core start orchestrator  # Start Orchestrator
+mbaigo core list                # List available core systems
 
 # Project Management
-./bin/mbaigo init --name MySystem     # Create new project
-./bin/mbaigo config show              # View configuration
-./bin/mbaigo config validate          # Validate config
-./bin/mbaigo system info              # Show system details
+mbaigo init --name MySystem     # Create new project
+mbaigo config show              # View configuration
+mbaigo config validate          # Validate config
+mbaigo system info              # Show system details
 
 # Code Generation
-./bin/mbaigo generate asset --name Sensor  # Generate asset template
-./bin/mbaigo generate example              # Generate complete example
+mbaigo generate asset --name Sensor  # Generate asset template
+mbaigo generate example              # Generate complete example
 
 # Service Management
-./bin/mbaigo service list             # List all services
-./bin/mbaigo service add              # Add service to asset
+mbaigo service list             # List all services
+mbaigo service add              # Add service to asset
 ```
 
 ## Create Your Own System
 
 ```bash
 # 1. Start core systems (in separate terminals)
-./bin/mbaigo core start esr
-./bin/mbaigo core start orchestrator
+mbaigo core start esr
+mbaigo core start orchestrator
 
 # 2. Create project directory
 mkdir my-sensor-system && cd my-sensor-system
 
 # 3. Initialize with CLI
-~/mbaigo/bin/mbaigo init --name MySensorSystem --cloud Factory
+mbaigo init --name MySensorSystem --cloud Factory
 
 # 4. Generate asset
-~/mbaigo/bin/mbaigo generate asset --name TemperatureSensor
+mbaigo generate asset --name TemperatureSensor
 
 # 5. Setup and run
 go mod init my-sensor-system
@@ -130,10 +136,10 @@ Complete service-oriented architecture demonstrating service registration, disco
 
 ```bash
 # Terminal 1: Start Service Registry
-./bin/mbaigo core start esr
+mbaigo core start esr
 
 # Terminal 2: Start Orchestrator
-./bin/mbaigo core start orchestrator
+mbaigo core start orchestrator
 
 # Terminal 3: Start application systems
 cd examples/three-sensors
