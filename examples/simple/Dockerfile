@@ -1,0 +1,40 @@
+# Dockerfile for simple example application
+
+FROM golang:1.24-alpine AS builder
+
+# Install build dependencies
+RUN apk add --no-cache git
+
+WORKDIR /build
+
+# Copy go mod files from root
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy necessary packages
+COPY pkg/ ./pkg/
+COPY examples/simple/ ./examples/simple/
+
+WORKDIR /build/examples/simple
+
+# Build the application
+RUN go build -o app .
+
+# Final stage - minimal runtime image
+FROM alpine:latest
+
+RUN apk add --no-cache ca-certificates curl
+
+WORKDIR /app
+
+# Copy the built application
+COPY --from=builder /build/examples/simple/app .
+
+# Copy the systemconfig.json from the examples directory
+COPY examples/simple/systemconfig.json /app/systemconfig.json
+
+# Expose the HTTP port (from systemconfig.json)
+EXPOSE 8080
+
+# Run the application
+CMD ["./app"]

@@ -1,0 +1,24 @@
+# Simple randomizer example
+# Run from this directory: docker-compose up --build
+
+services:
+  # Simple Randomizer Application
+  application:
+    build:
+      context: ../..
+      dockerfile: examples/simple/Dockerfile
+    container_name: simple-randomizer
+    ports:
+      - "8080:8080"
+    volumes:
+      - app-data:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/RandomizerSystem/randomizer/random"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  app-data:
