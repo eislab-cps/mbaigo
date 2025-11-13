@@ -159,6 +159,7 @@ make runchecks     # Run all checks
 - **[Architecture](./docs/ARCHITECTURE.MD)** - System design with diagrams
 - **[CLI Reference](./docs/CLI-REFERENCE.MD)** - Complete CLI documentation
 - **[Examples](./examples/)** - Working example applications
+- **[IEEE Paper](./paper/)** - Academic paper with performance evaluation
 
 ## Key Features
 
