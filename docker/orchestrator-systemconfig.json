@@ -1,0 +1,14 @@
+{
+  "systemname": "orchestrator",
+  "localcloud": "LocalCloud",
+  "protocolsNports": {
+    "http": 20103
+  },
+  "coreSystems": [
+    {
+      "coreSystem": "serviceregistrar",
+      "url": "http://esr:20102/serviceregistrar/registry"
+    }
+  ],
+  "unit_assets": []
+}

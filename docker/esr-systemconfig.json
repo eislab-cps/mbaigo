@@ -1,0 +1,9 @@
+{
+  "systemname": "serviceregistrar",
+  "localcloud": "LocalCloud",
+  "protocolsNports": {
+    "http": 20102
+  },
+  "coreSystems": [],
+  "unit_assets": []
+}

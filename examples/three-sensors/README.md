@@ -46,9 +46,6 @@ Prefer Docker? Start everything with one command:
 ```bash
 cd /path/to/mbaigo/examples/three-sensors
 docker-compose up --build
-
-# Or use the Makefile:
-make docker-up
 ```
 
 This automatically:
@@ -81,6 +78,11 @@ curl http://localhost:8080/MySystem/Controller1/control
 **View logs:**
 ```bash
 docker-compose logs -f
+
+# Or view specific service logs:
+docker-compose logs -f esr
+docker-compose logs -f orchestrator
+docker-compose logs -f application
 ```
 
 **Stop everything:**
@@ -88,9 +90,17 @@ docker-compose logs -f
 docker-compose down
 ```
 
-**Clean slate (remove volumes):**
+**Stop and remove volumes (clean slate):**
 ```bash
 docker-compose down -v
+```
+
+**Restart services:**
+```bash
+docker-compose restart
+
+# Or restart specific service:
+docker-compose restart orchestrator
 ```
 
 ### Docker Architecture
@@ -561,24 +571,63 @@ graph TD
 4. **Services** - HTTP endpoints exposed by assets
 5. **Forms** - Standardized data exchange formats (SignalA_v1a, SignalB_v1a)
 
-## Makefile Commands
+## Common Commands
 
-Convenience commands for easy operation:
+### Docker Operations (Recommended)
 
 ```bash
-# Docker operations (recommended)
-make docker-up       # Start all services with Docker
-make docker-down     # Stop all services
-make docker-logs     # View logs from all containers
-make docker-restart  # Restart services
-make docker-clean    # Stop and remove volumes
+# Start all services
+docker-compose up --build
 
-# Native Go (requires core systems running separately)
-make run            # Run application with go run
-make test           # Test all service endpoints
+# Start in background (detached mode)
+docker-compose up -d --build
 
-# Help
-make help           # Show all available commands
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+
+# Stop and remove volumes (clean slate)
+docker-compose down -v
+
+# Restart services
+docker-compose restart
+```
+
+### Native Go (Manual Setup)
+
+```bash
+# Terminal 1: Start ESR (from mbaigo root)
+cd /path/to/mbaigo
+./bin/mbaigo core start esr
+
+# Terminal 2: Start Orchestrator (from mbaigo root)
+cd /path/to/mbaigo
+./bin/mbaigo core start orchestrator
+
+# Terminal 3: Run application
+cd /path/to/mbaigo/examples/three-sensors
+go run *.go
+```
+
+### Testing Endpoints
+
+```bash
+# Check ESR status
+curl http://localhost:20102/serviceregistrar/registry/status
+
+# View all registered services
+curl http://localhost:20102/serviceregistrar/registry/query
+
+# Test temperature sensor
+curl http://localhost:8080/MySystem/TempSensor1/temperature
+
+# Test pressure sensor
+curl http://localhost:8080/MySystem/PressureSensor1/pressure
+
+# Test controller
+curl http://localhost:8080/MySystem/Controller1/control
 ```
 
 ## CLI Reference

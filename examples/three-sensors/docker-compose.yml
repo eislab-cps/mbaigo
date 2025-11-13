@@ -1,5 +1,3 @@
-version: '3.8'
-
 # Complete three-sensors example with core systems
 # Run from this directory: docker-compose up --build
 
@@ -18,7 +16,7 @@ services:
     volumes:
       - esr-data:/app/systems/esr
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:20102/serviceregistrar/registry/status"]
+      test: ["CMD", "curl", "-f", "http://localhost:20102/serviceregistrar/registry/status"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -41,12 +39,6 @@ services:
     depends_on:
       esr:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:20103/orchestrator/orchestration/status"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
-      start_period: 10s
     restart: unless-stopped
 
   # Three Sensors Application
@@ -62,16 +54,14 @@ services:
     volumes:
       - app-data:/app
     depends_on:
-      esr:
-        condition: service_healthy
-      orchestrator:
-        condition: service_healthy
+      - esr
+      - orchestrator
     environment:
       # Core system URLs (using container names for internal networking)
       - ESR_URL=http://esr:20102/serviceregistrar/registry
       - ORCHESTRATOR_URL=http://orchestrator:20103/orchestrator/orchestration
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/MySystem/TempSensor1/temperature"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/MySystem/TempSensor1/temperature"]
       interval: 10s
       timeout: 3s
       retries: 5

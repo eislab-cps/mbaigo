@@ -1,6 +1,6 @@
 # Dockerfile for three-sensors example application
 
-FROM golang:1.21-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 # Install build dependencies
 RUN apk add --no-cache git
@@ -23,12 +23,15 @@ RUN go build -o app .
 # Final stage - minimal runtime image
 FROM alpine:latest
 
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates curl
 
 WORKDIR /app
 
 # Copy the built application
 COPY --from=builder /build/examples/three-sensors/app .
+
+# Copy the systemconfig.json from the examples directory
+COPY examples/three-sensors/systemconfig.json /app/systemconfig.json
 
 # Expose the HTTP port (from systemconfig.json)
 EXPOSE 8080
