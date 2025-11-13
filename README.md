@@ -240,9 +240,9 @@ make runchecks     # Run all checks
 
 ## Documentation
 
-- **[Getting Started Guide](./docs/GETTING-STARTED.MD)** - Detailed tutorial
-- **[Architecture](./docs/ARCHITECTURE.MD)** - System design with diagrams
-- **[CLI Reference](./docs/CLI-REFERENCE.MD)** - Complete CLI documentation
+- **[Getting Started Guide](./docs/GETTING-STARTED.md)** - Detailed tutorial
+- **[Architecture](./docs/ARCHITECTURE.md)** - System design with diagrams
+- **[CLI Reference](./docs/CLI-REFERENCE.md)** - Complete CLI documentation
 - **[Examples](./examples/)** - Working example applications
 
 ## Key Features
