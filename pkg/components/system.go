@@ -140,7 +140,7 @@ func GetRunningCoreSystemURL(sys *System, systemType string) (string, error) {
 	return "", err
 }
 
-// The following code is used only for issues support on GitHub @sdoque
+// The following code is used only for issues support on GitHub @eislab-cps
 var (
 	AppName   string
 	Version   string

@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"os/signal"
 
-	"github.com/sdoque/mbaigo/pkg/components"
-	"github.com/sdoque/mbaigo/pkg/usecases"
+	"github.com/eislab-cps/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/usecases"
 )
 
 // PROPOSAL: new additions to usecases/configuration.go

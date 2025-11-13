@@ -4,46 +4,34 @@
 
 mbaigo is a Go library for building service-oriented IoT and cyber-physical systems using the [Arrowhead Framework](https://arrowhead.eu/). Create distributed systems with automatic service registration and discovery in minutes.
 
-## Quick Start (3 minutes)
+## Quick Start
 
-### 1. Install CLI
+### Fastest Path: Simple Example (No Setup Required)
+
+Get started immediately with a standalone example:
 
 ```bash
 git clone https://github.com/eislab-cps/mbaigo.git
-cd mbaigo
-make build
-
-# Optional: Install globally
-sudo make install
-# Now you can use 'mbaigo' from anywhere instead of './bin/mbaigo'
+cd mbaigo/examples/simple
+go run main.go
 ```
 
-### 2. Start Core Systems
-
-**IMPORTANT:** Run these commands from the **mbaigo root directory**, not from examples!
-
+Test it:
 ```bash
-# Terminal 1: Start Service Registry (from mbaigo root)
-cd /path/to/mbaigo
-mbaigo core start esr
-
-# Terminal 2: Start Orchestrator (from mbaigo root)
-cd /path/to/mbaigo
-mbaigo core start orchestrator
+curl http://localhost:8080/RandomizerSystem/randomizer/random
+# Response: {"value":42.5,"unit":"float64",...}
 ```
 
-**Notes:**
-- Use `mbaigo` if installed globally, or `./bin/mbaigo` if running from the build directory
-- Core systems must run from root to avoid config conflicts with application systems
-- **First run**: Each core system creates its config file and exits. Run the command again to start it.
-- Certificate authentication is disabled for this basic tutorial (no CA system needed)
+**Perfect for:** Learning the basics, understanding the UnitAsset interface
 
-### 3. Run Example Application
+### Full SOA Experience: Three Sensors with Docker
+
+Experience complete service registration and discovery:
 
 ```bash
-# Terminal 3: Start sensors
-cd examples/three-sensors
-go run *.go
+git clone https://github.com/eislab-cps/mbaigo.git
+cd mbaigo/examples/three-sensors
+docker-compose up --build
 ```
 
 Test it:
@@ -52,11 +40,45 @@ curl http://localhost:8080/MySystem/TempSensor1/temperature
 # Response: {"value":25,"unit":"celsius",...}
 ```
 
-**That's it!** You now have a complete Arrowhead local cloud with service discovery.
+**Perfect for:** Understanding service-oriented architecture, production-like deployment
 
-## Docker Quick Start (1 minute)
+### Native Setup (For CLI Development)
 
-Prefer Docker? Start everything with one command:
+If you want to develop with the CLI or run core systems natively:
+
+```bash
+# 1. Build CLI
+git clone https://github.com/eislab-cps/mbaigo.git
+cd mbaigo
+make build
+
+# Optional: Install globally
+sudo make install
+
+# 2. Start core systems (2 separate terminals from mbaigo root)
+# Terminal 1:
+mbaigo core start esr
+
+# Terminal 2:
+mbaigo core start orchestrator
+
+# 3. Run example (Terminal 3)
+cd examples/three-sensors
+go run *.go
+```
+
+**Notes:**
+- Core systems must run from mbaigo root directory
+- First run creates config files and exits - run again to start
+- Use `./bin/mbaigo` if not installed globally
+
+## Docker Quick Start
+
+Prefer Docker? Two options:
+
+### Option 1: Core Systems Only (Infrastructure)
+
+Start ESR and Orchestrator:
 
 ```bash
 git clone https://github.com/eislab-cps/mbaigo.git
@@ -67,7 +89,17 @@ docker-compose up --build
 This starts:
 - ESR on port 20102
 - Orchestrator on port 20103
-- Three-sensors example on port 8080
+
+### Option 2: Complete Example (All-in-One)
+
+Start core systems + application:
+
+```bash
+cd mbaigo/examples/three-sensors
+docker-compose up --build
+```
+
+This starts everything including the three-sensors application on port 8080.
 
 Test it:
 ```bash
@@ -153,22 +185,56 @@ mbaigo/
 ├── pkg/                 # Public library
 │   ├── components/      # System structure (System, Host, Husk, UnitAsset)
 │   ├── forms/           # Data exchange schemas (SignalA, ServiceRecord, etc.)
-│   └── usecases/        # Business logic (registration, discovery, consumption)
+│   ├── usecases/        # Business logic (registration, discovery, consumption)
+│   └── core/            # Embedded core systems (ESR, Orchestrator)
 ├── examples/            # Working examples
-│   └── three-sensors/   # Temperature, pressure, controller example
+│   ├── simple/          # Basic standalone example (no core systems)
+│   └── three-sensors/   # Full SOA example with service discovery
+├── docker/              # Pre-configured Docker configs for core systems
 └── docs/                # Detailed documentation
 ```
 
 ## Examples
 
-### Three Sensors Example
+### 1. Simple Randomizer (No Core Systems Required)
 
-Complete service-oriented architecture demonstrating service registration, discovery, and consumption:
-
-**Prerequisites:** Start core systems first (ESR and Orchestrator) **from mbaigo root directory**
+**Perfect for beginners** - Standalone HTTP service demonstrating the basics:
 
 ```bash
-# Terminal 1: Start Service Registry (from mbaigo root!)
+# Option 1: Native Go
+cd examples/simple
+go run main.go
+
+# Option 2: Docker
+cd examples/simple
+docker-compose up --build
+```
+
+Test it:
+```bash
+curl http://localhost:8080/RandomizerSystem/randomizer/random
+# Response: {"value":42.5,"unit":"float64",...}
+```
+
+**What it demonstrates:**
+- Basic system setup without core systems
+- UnitAsset interface implementation
+- HTTP service handling
+- Configuration-driven assets
+
+See [examples/simple/README.md](./examples/simple/README.md) for details.
+
+### 2. Three Sensors (Full Service-Oriented Architecture)
+
+**Complete example** demonstrating service registration, discovery, and consumption:
+
+```bash
+# Option 1: Docker (Recommended - all-in-one)
+cd examples/three-sensors
+docker-compose up --build
+
+# Option 2: Native Go (3 terminals needed)
+# Terminal 1: Start ESR (from mbaigo root!)
 cd /path/to/mbaigo
 mbaigo core start esr
 
@@ -176,14 +242,25 @@ mbaigo core start esr
 cd /path/to/mbaigo
 mbaigo core start orchestrator
 
-# Terminal 3: Start application systems
+# Terminal 3: Start application
 cd /path/to/mbaigo/examples/three-sensors
 go run *.go
 ```
 
-The application will register services with ESR and discover them through the Orchestrator.
+Test it:
+```bash
+curl http://localhost:8080/MySystem/TempSensor1/temperature
+curl http://localhost:8080/MySystem/PressureSensor1/pressure
+curl http://localhost:8080/MySystem/Controller1/control
+```
 
-**Important:** Core systems must run from mbaigo root, not from examples directory!
+**What it demonstrates:**
+- Service registration with ESR
+- Service discovery through Orchestrator
+- Multiple assets in one system
+- Service consumption (Cervices)
+- Automatic re-registration
+- Configuration with traits
 
 See [examples/three-sensors/README.md](./examples/three-sensors/README.md) for complete details.
 
@@ -227,9 +304,9 @@ make runchecks     # Run all checks
 
 ## Requirements
 
-- Go 1.21 or later
+- Go 1.24 or later
+- Docker (optional, for containerized deployment)
 - No external dependencies for basic usage
-- (Optional) Arrowhead Core Systems for multi-cloud deployments
 
 ## Status
 

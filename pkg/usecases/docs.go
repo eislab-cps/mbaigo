@@ -34,7 +34,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/sdoque/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/components"
 )
 
 // System Documentation (based on HATEOAS) provides an initial documentation on the system's web server of with hyperlinks to the services for browsers

@@ -25,8 +25,11 @@ vendor/
 # VS Code
 .vscode/launch.json
 
-# Configuration files (created at runtime)
-systemconfig.json
+# Configuration files (created at runtime - but NOT examples)
+/systemconfig.json
+
+# Runtime data for core systems (created when running natively)
+systems/
 
 # Private keys and certificates
 *.pem

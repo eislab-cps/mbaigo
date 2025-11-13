@@ -1,4 +1,4 @@
-module github.com/sdoque/mbaigo
+module github.com/eislab-cps/mbaigo
 
 go 1.24.4
 

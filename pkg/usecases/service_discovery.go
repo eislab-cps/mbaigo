@@ -26,8 +26,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/sdoque/mbaigo/pkg/components"
-	"github.com/sdoque/mbaigo/pkg/forms"
+	"github.com/eislab-cps/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/forms"
 )
 
 // ServRegForms returns the list of forms that the service registration handles

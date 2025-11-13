@@ -31,7 +31,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/sdoque/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/components"
 )
 
 // function Certificate provide one's own certificate upon request

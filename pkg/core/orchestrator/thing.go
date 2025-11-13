@@ -25,9 +25,9 @@ import (
 
 	"time"
 
-	"github.com/sdoque/mbaigo/pkg/components"
-	"github.com/sdoque/mbaigo/pkg/forms"
-	"github.com/sdoque/mbaigo/pkg/usecases"
+	"github.com/eislab-cps/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/forms"
+	"github.com/eislab-cps/mbaigo/pkg/usecases"
 )
 
 //-------------------------------------Define the Thing's resource

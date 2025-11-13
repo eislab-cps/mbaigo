@@ -1,0 +1,97 @@
+{
+  "systemname": "MySystem",
+  "localcloud": "LocalCloud",
+  "protocolsNports": {
+    "http": 8080
+  },
+  "coreSystems": [
+    {
+      "coreSystem": "serviceregistrar",
+      "url": "http://esr:20102/serviceregistrar/registry"
+    },
+    {
+      "coreSystem": "orchestrator",
+      "url": "http://orchestrator:20103/orchestrator/orchestration"
+    }
+  ],
+  "unit_assets": [
+    {
+      "name": "TempSensor1",
+      "details": {
+        "type": ["TemperatureSensor"],
+        "location": ["Building A"]
+      },
+      "services": [
+        {
+          "definition": "TemperatureReading",
+          "subpath": "temperature",
+          "registrationPeriod": 30,
+          "details": {
+            "unit": ["celsius"],
+            "datatype": ["float64"]
+          },
+          "description": "Provides temperature readings in celsius"
+        }
+      ],
+      "traits": [
+        {
+          "minValue": 15.0,
+          "maxValue": 30.0
+        }
+      ]
+    },
+    {
+      "name": "PressureSensor1",
+      "details": {
+        "type": ["PressureSensor"],
+        "location": ["Building A"]
+      },
+      "services": [
+        {
+          "definition": "PressureReading",
+          "subpath": "pressure",
+          "registrationPeriod": 30,
+          "details": {
+            "unit": ["bar"],
+            "datatype": ["float64"]
+          },
+          "description": "Provides pressure readings in bar"
+        }
+      ],
+      "traits": [
+        {
+          "minValue": 0.9,
+          "maxValue": 1.1
+        }
+      ]
+    },
+    {
+      "name": "Controller1",
+      "details": {
+        "type": ["Controller"],
+        "location": ["Building A"]
+      },
+      "services": [
+        {
+          "definition": "ControlStatus",
+          "subpath": "control",
+          "registrationPeriod": 30,
+          "details": {
+            "datatype": ["boolean"]
+          },
+          "description": "Provides controller status"
+        }
+      ],
+      "cervices": [
+        {
+          "definition": "TemperatureReading",
+          "provider": "TempSensor1"
+        },
+        {
+          "definition": "PressureReading",
+          "provider": "PressureSensor1"
+        }
+      ]
+    }
+  ]
+}

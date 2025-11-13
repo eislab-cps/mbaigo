@@ -27,7 +27,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/sdoque/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/components"
 )
 
 // configurableAsset is a struct that contains the name of the asset and its

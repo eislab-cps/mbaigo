@@ -33,7 +33,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/sdoque/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/components"
 )
 
 // RequestCertificate generates the system's public key and a certificate signing request to be sent to the CA

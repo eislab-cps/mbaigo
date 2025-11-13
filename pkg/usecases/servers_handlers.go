@@ -34,8 +34,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sdoque/mbaigo/pkg/components"
-	"github.com/sdoque/mbaigo/pkg/forms"
+	"github.com/eislab-cps/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/forms"
 )
 
 // SetoutServers setups the http and https servers and starts them

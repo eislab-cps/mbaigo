@@ -7,7 +7,7 @@ Command-line tool for managing Arrowhead Framework systems.
 ### From Source
 
 ```bash
-go install github.com/sdoque/mbaigo/cmd/mbaigo@latest
+go install github.com/eislab-cps/mbaigo/cmd/mbaigo@latest
 ```
 
 ### Build Locally

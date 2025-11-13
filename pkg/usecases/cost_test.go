@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/sdoque/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/components"
 )
 
 func TestGetActivitiesCost(t *testing.T) {

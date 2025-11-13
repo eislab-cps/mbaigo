@@ -30,7 +30,7 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/sdoque/mbaigo/pkg/forms"
+	"github.com/eislab-cps/mbaigo/pkg/forms"
 )
 
 // Pack serializes a form to a byte array for payload shipment with serialization format (sf) request

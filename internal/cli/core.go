@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"path/filepath"
 	"syscall"
 
-	"github.com/sdoque/mbaigo/pkg/core/esr"
-	"github.com/sdoque/mbaigo/pkg/core/orchestrator"
+	"github.com/eislab-cps/mbaigo/pkg/core/esr"
+	"github.com/eislab-cps/mbaigo/pkg/core/orchestrator"
 	"github.com/spf13/cobra"
 )
 
@@ -44,7 +43,7 @@ var coreListCmd = &cobra.Command{
 		fmt.Println(repeat("=", 60))
 
 		if len(systems) == 0 {
-			fmt.Println("No core systems found in systems/ directory")
+			fmt.Println("No core systems available")
 			return nil
 		}
 
@@ -94,86 +93,25 @@ Example:
 // CoreSystemInfo holds information about a core system
 type CoreSystemInfo struct {
 	Name        string `json:"name"`
-	Path        string `json:"path"`
 	Description string `json:"description,omitempty"`
 	Port        int    `json:"port,omitempty"`
 }
 
-// getAvailableCoreSystems scans the systems/ directory for core systems
+// getAvailableCoreSystems returns the list of embedded core systems
 func getAvailableCoreSystems() ([]CoreSystemInfo, error) {
-	systemsDir := "systems"
-
-	// Check if systems directory exists
-	if _, err := os.Stat(systemsDir); os.IsNotExist(err) {
-		return nil, fmt.Errorf("systems directory not found (are you in the mbaigo root directory?)")
-	}
-
-	entries, err := os.ReadDir(systemsDir)
-	if err != nil {
-		return nil, err
-	}
-
-	var coreSystems []CoreSystemInfo
-
-	// Map of known core systems with their descriptions and default ports
-	knownSystems := map[string]CoreSystemInfo{
-		"esr": {
+	// Return embedded core systems directly
+	// No need to scan systems/ directory - it's only for runtime data now
+	coreSystems := []CoreSystemInfo{
+		{
 			Name:        "esr",
 			Description: "Ephemeral Service Registry - tracks available services [EMBEDDED]",
 			Port:        20102,
 		},
-		"orchestrator": {
+		{
 			Name:        "orchestrator",
 			Description: "Orchestrator - handles service discovery [EMBEDDED]",
 			Port:        20103,
 		},
-		"messenger": {
-			Name:        "messenger",
-			Description: "Messenger - event handling and logging",
-			Port:        20104,
-		},
-	}
-
-	for _, entry := range entries {
-		if !entry.IsDir() {
-			continue
-		}
-
-		name := entry.Name()
-
-		// Skip non-core directories
-		if name == ".git" || name == "." || name == ".." {
-			continue
-		}
-
-		systemPath := filepath.Join(systemsDir, name)
-
-		// Check if it has a main.go or .go files
-		hasGoFiles := false
-		files, err := os.ReadDir(systemPath)
-		if err == nil {
-			for _, f := range files {
-				if filepath.Ext(f.Name()) == ".go" && !f.IsDir() {
-					hasGoFiles = true
-					break
-				}
-			}
-		}
-
-		if !hasGoFiles {
-			continue
-		}
-
-		// Use known info if available, otherwise create basic entry
-		if info, exists := knownSystems[name]; exists {
-			info.Path = systemPath
-			coreSystems = append(coreSystems, info)
-		} else {
-			coreSystems = append(coreSystems, CoreSystemInfo{
-				Name: name,
-				Path: systemPath,
-			})
-		}
 	}
 
 	return coreSystems, nil
@@ -226,14 +164,7 @@ func startCoreSystem(systemName string) error {
 	}
 }
 
-// startExternalSystem starts a core system from the systems/ directory
+// startExternalSystem handles attempts to start non-embedded systems
 func startExternalSystem(systemName string) error {
-	systemPath := filepath.Join("systems", systemName)
-
-	// Check if the system directory exists
-	if _, err := os.Stat(systemPath); os.IsNotExist(err) {
-		return fmt.Errorf("core system '%s' not found (not embedded and not in systems/ directory)", systemName)
-	}
-
-	return fmt.Errorf("external systems from systems/ directory are not supported in embedded mode. Use 'cd systems/%s && go run .' instead", systemName)
+	return fmt.Errorf("core system '%s' not found. Available embedded systems: esr, orchestrator", systemName)
 }

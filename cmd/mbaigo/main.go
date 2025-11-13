@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/sdoque/mbaigo/internal/cli"
+	"github.com/eislab-cps/mbaigo/internal/cli"
 )
 
 func main() {

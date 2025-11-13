@@ -34,7 +34,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/sdoque/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/components"
 )
 
 // function KGraphing provides a semantic model of a system running on a host and exposing the functionality of asset

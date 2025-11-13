@@ -26,8 +26,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/sdoque/mbaigo/pkg/components"
-	"github.com/sdoque/mbaigo/pkg/forms"
+	"github.com/eislab-cps/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/forms"
 )
 
 // HTTPProcessSetRequest processes a Get request

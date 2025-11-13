@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/sdoque/mbaigo/pkg/forms"
+	"github.com/eislab-cps/mbaigo/pkg/forms"
 )
 
 type packParams struct {

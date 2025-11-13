@@ -31,9 +31,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sdoque/mbaigo/pkg/components"
-	"github.com/sdoque/mbaigo/pkg/forms"
-	"github.com/sdoque/mbaigo/pkg/usecases"
+	"github.com/eislab-cps/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/forms"
+	"github.com/eislab-cps/mbaigo/pkg/usecases"
 )
 
 // Start starts the ESR (Ephemeral Service Registry) system
@@ -50,7 +50,7 @@ func Start(ctx context.Context) error {
 		Description: "is an Arrowhead mandatory core system that keeps track of the currently available services.",
 		Details:     map[string][]string{"Developer": {"Synecdoque"}, "LocalCloud": {"AlphaCloud"}},
 		ProtoPort:   map[string]int{"https": 0, "http": 20102, "coap": 0},
-		InfoLink:    "https://github.com/sdoque/systems/tree/main/esr",
+		InfoLink:    "https://github.com/eislab-cps/mbaigo/tree/main/pkg/core/esr",
 		DName: pkix.Name{
 			CommonName:         sys.Name,
 			Organization:       []string{"Synecdoque"},

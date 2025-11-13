@@ -24,9 +24,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/sdoque/mbaigo/pkg/components"
-	"github.com/sdoque/mbaigo/pkg/forms"
-	"github.com/sdoque/mbaigo/pkg/usecases"
+	"github.com/eislab-cps/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/forms"
+	"github.com/eislab-cps/mbaigo/pkg/usecases"
 )
 
 // Start starts the Orchestrator system
@@ -44,7 +44,7 @@ func Start(ctx context.Context) error {
 		Certificate: "ABCD",
 		Details:     map[string][]string{"Developer": {"Arrowhead"}},
 		ProtoPort:   map[string]int{"https": 0, "http": 20103, "coap": 0},
-		InfoLink:    "https://github.com/sdoque/systems/tree/main/orchestrator",
+		InfoLink:    "https://github.com/eislab-cps/mbaigo/tree/main/pkg/core/orchestrator",
 		DName: pkix.Name{
 			CommonName:         sys.Name,
 			Organization:       []string{"Synecdoque"},

@@ -28,8 +28,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/sdoque/mbaigo/pkg/components"
-	"github.com/sdoque/mbaigo/pkg/forms"
+	"github.com/eislab-cps/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/forms"
 )
 
 // GetState request the current state of a unit asset (via the asset's service)

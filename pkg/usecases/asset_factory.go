@@ -3,7 +3,7 @@ package usecases
 import (
 	"sync"
 
-	"github.com/sdoque/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/components"
 )
 
 // AssetFactory is a function that creates a UnitAsset from configuration

@@ -7,7 +7,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/sdoque/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/components"
 )
 
 // A mocked UnitAsset used for testing

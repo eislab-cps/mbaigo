@@ -43,9 +43,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/sdoque/mbaigo/pkg/components"
-	"github.com/sdoque/mbaigo/pkg/forms"
-	"github.com/sdoque/mbaigo/pkg/usecases"
+	"github.com/eislab-cps/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/forms"
+	"github.com/eislab-cps/mbaigo/pkg/usecases"
 )
 
 // %sTraits defines the configurable parameters for this asset
@@ -167,9 +167,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/sdoque/mbaigo/pkg/components"
-	"github.com/sdoque/mbaigo/pkg/forms"
-	"github.com/sdoque/mbaigo/pkg/usecases"
+	"github.com/eislab-cps/mbaigo/pkg/components"
+	"github.com/eislab-cps/mbaigo/pkg/forms"
+	"github.com/eislab-cps/mbaigo/pkg/usecases"
 )
 
 // ExampleAsset provides a simple random number service
