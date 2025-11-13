@@ -24,9 +24,9 @@ curl http://localhost:8080/RandomizerSystem/randomizer/random
 
 **Perfect for:** Learning the basics, understanding the UnitAsset interface
 
-### Full SOA Experience: Three Sensors with Docker
+### Full SOA: Three Sensors with Docker
 
-Experience complete service registration and discovery:
+Complete service registration and discovery:
 
 ```bash
 git clone https://github.com/eislab-cps/mbaigo.git
