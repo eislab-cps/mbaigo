@@ -72,42 +72,6 @@ go run *.go
 - First run creates config files and exits - run again to start
 - Use `./bin/mbaigo` if not installed globally
 
-## Docker Quick Start
-
-Prefer Docker? Two options:
-
-### Option 1: Core Systems Only (Infrastructure)
-
-Start ESR and Orchestrator:
-
-```bash
-git clone https://github.com/eislab-cps/mbaigo.git
-cd mbaigo
-docker-compose up --build
-```
-
-This starts:
-- ESR on port 20102
-- Orchestrator on port 20103
-
-### Option 2: Complete Example (All-in-One)
-
-Start core systems + application:
-
-```bash
-cd mbaigo/examples/three-sensors
-docker-compose up --build
-```
-
-This starts everything including the three-sensors application on port 8080.
-
-Test it:
-```bash
-curl http://localhost:8080/MySystem/TempSensor1/temperature
-```
-
-See **[DOCKER.md](./DOCKER.md)** for complete Docker documentation.
-
 ## CLI Features
 
 The `mbaigo` CLI provides everything you need:
@@ -160,6 +124,20 @@ go run *.go
 
 Your system will register with ESR and be discoverable through the Orchestrator!
 
+## Docker Deployment
+
+Start core systems only:
+```bash
+cd mbaigo
+docker-compose up --build
+```
+
+Or start a complete example with core systems + application:
+```bash
+cd mbaigo/examples/three-sensors
+docker-compose up --build
+```
+
 ## Core Concepts
 
 **System Hierarchy:**
@@ -173,7 +151,7 @@ System
 ```
 
 **Service Flow:**
-1. Providers register services with ESR
+1. Providers register services with ESR (Service Registry)
 2. Consumers query Orchestrator for services
 3. Direct HTTP/HTTPS communication between systems
 
@@ -196,55 +174,43 @@ mbaigo/
 
 ## Examples
 
-### 1. Simple Randomizer (No Core Systems Required)
+### 1. Simple Randomizer (Standalone - No Core Systems)
 
 **Perfect for beginners** - Standalone HTTP service demonstrating the basics:
 
 ```bash
-# Option 1: Native Go
 cd examples/simple
 go run main.go
 
-# Option 2: Docker
-cd examples/simple
+# Or with Docker:
 docker-compose up --build
 ```
 
 Test it:
 ```bash
 curl http://localhost:8080/RandomizerSystem/randomizer/random
-# Response: {"value":42.5,"unit":"float64",...}
 ```
 
 **What it demonstrates:**
 - Basic system setup without core systems
 - UnitAsset interface implementation
 - HTTP service handling
-- Configuration-driven assets
 
 See [examples/simple/README.md](./examples/simple/README.md) for details.
 
 ### 2. Three Sensors (Full Service-Oriented Architecture)
 
-**Complete example** demonstrating service registration, discovery, and consumption:
+**Complete example** with service registration, discovery, and consumption:
 
 ```bash
-# Option 1: Docker (Recommended - all-in-one)
+# Docker (Recommended - all-in-one):
 cd examples/three-sensors
 docker-compose up --build
 
-# Option 2: Native Go (3 terminals needed)
-# Terminal 1: Start ESR (from mbaigo root!)
-cd /path/to/mbaigo
-mbaigo core start esr
-
-# Terminal 2: Start Orchestrator (from mbaigo root!)
-cd /path/to/mbaigo
-mbaigo core start orchestrator
-
-# Terminal 3: Start application
-cd /path/to/mbaigo/examples/three-sensors
-go run *.go
+# Or Native Go (requires 3 terminals):
+# Terminal 1 (from mbaigo root): mbaigo core start esr
+# Terminal 2 (from mbaigo root): mbaigo core start orchestrator
+# Terminal 3: cd examples/three-sensors && go run *.go
 ```
 
 Test it:
@@ -260,17 +226,8 @@ curl http://localhost:8080/MySystem/Controller1/control
 - Multiple assets in one system
 - Service consumption (Cervices)
 - Automatic re-registration
-- Configuration with traits
 
-See [examples/three-sensors/README.md](./examples/three-sensors/README.md) for complete details.
-
-## What You Get with the CLI
-
-- **Instant Core Systems** - Embedded ESR and Orchestrator (no separate installation)
-- **Code Generation** - Generate asset templates and examples
-- **Project Management** - Initialize, configure, validate projects
-- **System Monitoring** - View system info, list services
-- **Zero Config Start** - Default configs for immediate development
+See [examples/three-sensors/README.md](./examples/three-sensors/README.md) for details.
 
 ## Development
 
@@ -284,13 +241,9 @@ make runchecks     # Run all checks
 ## Documentation
 
 - **[Getting Started Guide](./docs/GETTING-STARTED.MD)** - Detailed tutorial
-- **[Deployment Options](./DEPLOYMENT-OPTIONS.md)** - Compare Docker vs Native deployment
-- **[Docker Deployment](./DOCKER.md)** - Complete Docker Compose guide
-- **[Testing Guide](./TESTING.md)** - Step-by-step testing instructions
 - **[Architecture](./docs/ARCHITECTURE.MD)** - System design with diagrams
 - **[CLI Reference](./docs/CLI-REFERENCE.MD)** - Complete CLI documentation
 - **[Examples](./examples/)** - Working example applications
-- **[IEEE Paper](./paper/)** - Academic paper with performance evaluation
 
 ## Key Features
 
